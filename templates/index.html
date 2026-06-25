@@ -1,9 +1,150 @@
 {% extends 'base.html' %}
 {% block title %} Home {% endblock %}
-{% block content %} 
+{% block content %}
 
 <div>
-    
+    <section class="hero-section text-center py-5">
+        <div class="container">
+            <h1 class="display-4 fw-bold">
+                Take Control of Your Financial Future Today
+            </h1>
+
+            <p class="lead mt-3">
+                Track expenses, get finanacial ananlysis, and achieve your financial goals with Novora Wealth.
+            </p>
+
+            <div class="mt-4">
+                <a href="/goals" class="btn btn-lg hero-btn">
+                    Get Started!
+                </a>
+            </div>
+            <div>
+                <a href="/dashboard" class="btn btn-outline-secondary btn-lg mt-3">
+                    View Dashboard
+                </a>
+            </div>
+        </div>
+    </section>
 </div>
 
+<div class="container my-5">
+    <div class="row g-4">
+
+        <div class="col-md-3">
+            <div class="card quick-card">
+                <div class="card-body text-center">
+                    <h5 class="card-header mb-4 ">Budgets</h5>
+                    <p>Manage and control your expenditures.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card quick-card">
+                <div class="card-body text-center">
+                    <h5 class="card-header mb-4">Goals</h5>
+                    <p>Set targets that give your money purpose.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card quick-card">
+                <div class="card-body text-center">
+                    <h5 class="card-header mb-4">Save Consistently</h5>
+                     <p>Small amounts saved regularly lead to big results.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card quick-card">
+                <div class="card-body text-center">
+                    <h5 class="card-header mb-4">Reports</h5>
+                    <p>Get financial insights to make better decisions.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="card tip-card">
+        <div class="card-body">
+            <h3 class="tip-title">
+                <i class="bi bi-lightbulb-fill"></i>Finance Tip of the Day
+            </h3>
+
+            <p class="tip-text">
+                Follow the <strong>50/30/20 rule</strong>: 50% for needs,
+                30% for wants, and 20% for savings and investments.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+
+    <h2 class="text-center mb-4">
+        Why Novora Wealth?
+    </h2>
+
+    <div class="row g-4">
+
+        <div class="col-md-4">
+            <div class="card feature-card">
+                <div class="card-body">
+                    <h4>📊 Smart Tracking</h4>
+                    <p>
+                        Understand where your money goes and make informed spending decisions.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card feature-card">
+                <div class="card-body">
+                    <h4>🎯 Goal Planning</h4>
+                    <p>
+                        Turn financial ambitions into actionable plans and track your progress.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card feature-card">
+                <div class="card-body">
+                    <h4>💰 Healthy Saving Habits</h4>
+                    <p>
+                        Build good financial habits to help you achieve your goals faster.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <section class="goal-section text-center py-5 mt-5">
+    <div class="container py-5">
+
+        <h2>
+            Get Started With Your Financial Goals!
+        </h2>
+
+        <p class="mt-3">
+            Whether it's an emergency fund, a car, or a dream vacation,
+            every goal starts with one step.
+        </p>
+
+        <a href="/goals" class="btn hero-btn btn-lg mt-3">
+            Create a Goal
+        </a>
+
+    </div>
+</section>
+
+</div>
 {% endblock %}

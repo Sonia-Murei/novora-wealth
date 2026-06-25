@@ -4,8 +4,8 @@
 
 <div>
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Launch demo modal
+    <button type="button" class="btn btn-primary mt-4 ms-4" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Add a Budget
     </button>
 
     <!-- Modal -->
@@ -13,45 +13,53 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Budget</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div>
-                        <form action="/add_budget" method="POST">
+                        <div class="container mt-5">
+                            <div class="form-card">
 
-                            <div class="mb-3">
-                                <label class="form-label">Category</label>
+                                <h2 class="mb-4">Add Budget</h2>
+                                <form action="/add_budget" method="POST">
 
-                                <select name="category_id" class="form-control" required>
+                                    <div class="mb-3">
+                                        <label class="form-label">Category</label>
 
-                                    {% for category in categories %}
-                                    <option value="{{ category[0] }}">
-                                        {{ category[1] }}
-                                    </option>
-                                    {% endfor %}
+                                        <select name="category_id" class="form-control" required>
 
-                                </select>
+                                            {% for category in categories %}
+                                            <option value="{{ category[0] }}">
+                                                {{ category[1] }}
+                                            </option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Budget Limit</label>
+
+                                        <input type="number" step="0.01" name="limit_amount" class="form-control"
+                                            required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Month</label>
+
+                                        <input type="month" name="month" class="form-control" required>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </div>
+
+                                </form>
                             </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Budget Limit</label>
-
-                                <input type="number" step="0.01" name="limit_amount" class="form-control" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Month</label>
-
-                                <input type="month" name="month" class="form-control" required>
-                            </div>
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
-                            </div>
-
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>

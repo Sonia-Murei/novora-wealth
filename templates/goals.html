@@ -4,8 +4,8 @@
 
 <div>
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Launch demo modal
+    <button type="button" class="btn btn-primary mt-4 ms-4" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Create a Goal
     </button>
 
     <!-- Modal -->
@@ -13,40 +13,48 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Goal</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div>
-                        <form action="/add_goal" method="POST">
+                        <div class="container mt-5">
+                            <div class="form-card">
 
-                            <div class="mb-3">
-                                <label class="form-label">Goal Name</label>
-                                <input type="text" name="goal_name" class="form-control" required>
+                                <h2 class="mb-4">Create Goal</h2>
+                                <form action="/add_goal" method="POST">
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Goal Name</label>
+                                        <input type="text" name="goal_name" class="form-control" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Target Amount</label>
+                                        <input type="number" step="0.01" name="target_amount" class="form-control"
+                                            required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Initial Saved Amount</label>
+                                        <input type="number" step="0.01" name="saved_amount" class="form-control"
+                                            value="0" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Deadline</label>
+                                        <input type="date" name="deadline" class="form-control" required>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Create Goal</button>
+                                    </div>
+
+                                </form>
                             </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Target Amount</label>
-                                <input type="number" step="0.01" name="target_amount" class="form-control" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Initial Saved Amount</label>
-                                <input type="number" step="0.01" name="saved_amount" class="form-control" value="0"
-                                    required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Deadline</label>
-                                <input type="date" name="deadline" class="form-control" required>
-                            </div>
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Create Goal</button>
-                            </div>
-
-                        </form>
+                        </div>
                     </div>
                 </div>
 
