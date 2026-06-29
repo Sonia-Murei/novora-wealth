@@ -3,7 +3,24 @@ import psycopg2
 conn = psycopg2.connect(host='localhost',port=5432,user='postgres',password='murei@123',dbname='novora')
 
 cur = conn.cursor()
+from datetime import date
 
+# Inserts transactions from goal edits
+def insert_goal_transaction(user_id, category_id, amount, description):
+
+    cur.execute("""
+        INSERT INTO transactions
+        (user_id,category_id,type,amount,description,transaction_date)
+        VALUES(%s, %s, %s, %s, %s, %s)""", (
+        user_id,
+        category_id,
+        "income",
+        amount,
+        description,
+        date.today()
+    ))
+
+    conn.commit()
 # Transactions Queries:
 
 def get_transactions():
@@ -185,8 +202,19 @@ def get_goals():
     goals = cur.fetchall()
     return goals
 
+def fetch_goal(goal_id):
+    cur.execute("""
+        SELECT goal_name, saved_amount
+        FROM goals
+        WHERE id = %s
+    """, (goal_id,))
+
+    return cur.fetchone()
+
 def insert_goals(values):
-    cur.execute(f"insert into goals(user_id, goal_name, target_amount, saved_amount, deadline) values{values}")
+    cur.execute("""INSERT INTO goals(user_id, goal_name, target_amount, saved_amount, deadline)
+        VALUES (%s, %s, %s, %s, %s)""", values)
+
     conn.commit()
 
 def get_user_goals(user_id):
@@ -202,12 +230,18 @@ def get_user_goals(user_id):
 
 def update_goal_progress(goal_id, amount):
     cur.execute("""
-        UPDATE goals
-        SET saved_amount = LEAST(
-            saved_amount + %s,
-            target_amount
-        ) WHERE id = %s
+        UPDATE goals SET saved_amount = LEAST(saved_amount + %s,target_amount) WHERE id = %s
     """, (amount, goal_id))
+
+    conn.commit()
+
+# For adding savings to an existing goal:
+def update_goal_details(values):
+
+    cur.execute("""
+        UPDATE goals SET goal_name = %s, target_amount = %s,
+        saved_amount = %s, deadline = %s WHERE id = %s
+    """, values)
 
     conn.commit()
 
@@ -249,3 +283,23 @@ def create_user(user_details):
     cur.execute("insert into users(full_name,email,phone_number,password)values(%s,%s,%s,%s)",user_details)
     conn.commit()
 
+# Search query
+def search_goals(user_id, search):
+
+    cur.execute("""SELECT id, goal_name, target_amount, saved_amount, deadline
+        FROM goals WHERE user_id = %s AND LOWER(goal_name) LIKE LOWER(%s)
+        ORDER BY deadline ASC
+    """, (user_id, f"%{search}%"))
+
+    return cur.fetchall()
+
+def get_savings_category():
+
+    cur.execute("SELECT id FROM categories WHERE category_name = 'Savings'")
+
+    result = cur.fetchone()
+
+    if result:
+        return result[0]
+
+    return None

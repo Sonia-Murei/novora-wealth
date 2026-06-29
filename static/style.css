@@ -235,3 +235,362 @@
     border-bottom: 2px solid #d8c8ec;
     padding-bottom: 0.75rem;
 }
+.empty-state{
+    background:white;
+    border-radius:18px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    padding:60px 30px;
+    text-align:center;
+}
+
+.empty-state i{
+    font-size:4rem;
+    color:#8e6bbf;
+    margin-bottom:20px;
+}
+
+.empty-state h3{
+    color:#4b3d63;
+    margin-bottom:10px;
+}
+
+.empty-state p{
+    color:#777;
+    max-width:500px;
+    margin:0 auto;
+}
+/* =========================
+   GOALS PAGE
+========================= */
+
+.goals-page{
+    padding-bottom:60px;
+}
+
+/* =========================
+   PAGE TITLE
+========================= */
+
+.page-title{
+    color:#4b3d63;
+    font-weight:700;
+}
+
+.page-title i{
+    color:#8e6bbf;
+}
+
+/* =========================
+   SUMMARY CARDS
+========================= */
+
+.summary-card{
+    background:#fff;
+    border-radius:18px;
+    padding:25px;
+    display:flex;
+    align-items:center;
+    gap:18px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.06);
+
+    transition:.3s ease;
+}
+
+.summary-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 12px 28px rgba(0,0,0,.12);
+}
+
+.summary-card h6{
+    color:#777;
+    margin-bottom:5px;
+}
+
+.summary-card h3{
+    color:#4b3d63;
+    font-weight:700;
+}
+
+/* =========================
+   ICON CIRCLE
+========================= */
+
+.icon-circle{
+    width:60px;
+    height:60px;
+
+    border-radius:50%;
+
+    background:#8e6bbf;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.icon-circle i{
+    color:white;
+    font-size:1.4rem;
+}
+
+/* =========================
+   FILTER CARD
+========================= */
+
+.filter-card{
+    border:none;
+    border-radius:18px;
+    box-shadow:0 8px 20px rgba(0,0,0,.06);
+}
+
+/* Search */
+
+.input-group-text{
+    background:#8e6bbf;
+    color:white;
+    border:none;
+}
+
+.form-control{
+    border-radius:0 10px 10px 0;
+}
+
+.form-control:focus{
+    border-color:#8e6bbf;
+    box-shadow:0 0 0 .15rem rgba(142,107,191,.25);
+}
+
+/* =========================
+   FILTER BUTTONS
+========================= */
+
+.btn-filter{
+    border:1px solid #d9c8f3;
+    color:#8e6bbf;
+    background:white;
+    border-radius:30px;
+    margin-left:8px;
+    padding:8px 18px;
+    transition:.3s;
+}
+
+.btn-filter:hover{
+    background:#8e6bbf;
+    color:white;
+}
+
+.btn-filter.active{
+    background:#8e6bbf;
+    color:white;
+}
+
+/* GOAL CARD */
+
+.goal-card{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:28px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.06);
+
+    transition:.3s ease;
+}
+
+.goal-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 12px 28px rgba(0,0,0,.12);
+
+}
+
+.goal-title{
+
+    color:#4b3d63;
+
+    font-weight:700;
+
+}
+
+.goal-icon{
+
+    font-size:2rem;
+
+    color:#8e6bbf;
+
+}
+
+/* =========================
+   STATUS BADGE
+========================= */
+
+.goal-status{
+
+    background:#efe6fb;
+
+    color:#8e6bbf;
+
+    font-weight:600;
+
+    padding:8px 14px;
+
+    border-radius:20px;
+
+}
+
+/* =========================
+   GOAL INFO
+========================= */
+
+.goal-info{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:20px;
+
+}
+
+.goal-info small{
+
+    color:#888;
+
+}
+
+.goal-info h6{
+
+    font-weight:700;
+
+    color:#4b3d63;
+
+    margin-top:5px;
+
+}
+
+/*PROGRESS BAR*/
+.progress{
+    height:14px;
+    background:#e9dff6;
+    border-radius:999px;
+    overflow:hidden;
+}
+
+.progress .progress-bar{
+    background:#7d33e4;
+    color:white;
+    font-size:.75rem;
+    font-weight:600;
+    transition:width .8s ease; /*Adds animation */
+}
+
+/*DEADLINE */
+
+.deadline{
+    color:#666;
+    font-size:.95rem;
+}
+
+.deadline strong{
+    color:#4b3d63;
+}
+
+/* BUTTONS */
+
+.btn-primary{
+    background:#8e6bbf;
+    border:none;
+}
+
+.btn-primary:hover{
+    background:#7a58a8;
+}
+
+.btn-outline-primary{
+    color:#8e6bbf;
+    border-color:#8e6bbf;
+}
+
+.btn-outline-primary:hover{
+    background:#8e6bbf;
+    border-color:#8e6bbf;
+}
+
+.btn-outline-danger{
+    border-radius:10px;
+}
+
+.btn{
+    border-radius:10px;
+}
+
+/* EMPTY STATE */
+
+.empty-state{
+    background:white;
+    border-radius:20px;
+    padding:60px;
+    text-align:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.06);
+}
+
+.empty-state i{
+    font-size:4rem;
+    color:#8e6bbf;
+    margin-bottom:20px;
+}
+
+.empty-state h3{
+    color:#4b3d63;
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+.empty-state p{
+    color:#777;
+    max-width:500px;
+    margin:auto;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:992px){
+    .goal-info{
+        grid-template-columns:1fr;
+    }
+    .summary-card{
+        justify-content:center;
+        text-align:center;
+        flex-direction:column;
+    }
+}
+
+@media(max-width:768px){
+    .page-title{
+        font-size:1.8rem;
+    }
+    .btn-filter{
+        margin-top:8px;
+    }
+    .goal-card{
+        padding:22px;
+    }
+}
+.summary-card{
+    min-height:140px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.summary-card h3{
+    font-size:1.6rem;
+    white-space:nowrap;
+}
