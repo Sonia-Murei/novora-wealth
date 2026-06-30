@@ -148,8 +148,9 @@ def budgets():
     print(session)
     user_id = session["user_id"]
 
+    categories = get_categories()
     budgets_data = get_all_budget_usage(user_id)
-    return render_template("budgets.html", budgets_data=budgets_data)
+    return render_template("budgets.html", budgets_data=budgets_data,categories=categories)
 
 
 @app.route("/add_budget", methods=["POST"])
