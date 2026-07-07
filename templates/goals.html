@@ -158,17 +158,30 @@
 
                 <div class="col-lg-6 text-lg-end">
 
-                    <button class="btn btn-filter active">
+                    <a href="{{ url_for('goals') }}"
+                        class="btn {% if not request.args.get('status') %}btn-primary{% else %}btn-outline-secondary{% endif %}">
                         All
-                    </button>
+                    </a>
 
-                    <button class="btn btn-filter">
+                    <a href="{{ url_for('goals', status='Active') }}"
+                        class="btn {% if request.args.get('status') == 'Active' %}btn-primary{% else %}btn-outline-secondary{% endif %}">
                         Active
-                    </button>
+                    </a>
 
-                    <button class="btn btn-filter">
+                    <a href="{{ url_for('goals', status='Completed') }}"
+                        class="btn {% if request.args.get('status') == 'Completed' %}btn-primary{% else %}btn-outline-secondary{% endif %}">
                         Completed
-                    </button>
+                    </a>
+
+                    <a href="{{ url_for('goals', status='Due Soon') }}"
+                        class="btn {% if request.args.get('status') == 'Due Soon' %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+                        Due Soon
+                    </a>
+
+                    <a href="{{ url_for('goals', status='Overdue') }}"
+                        class="btn {% if request.args.get('status') == 'Overdue' %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+                        Overdue
+                    </a>
 
                 </div>
 
@@ -200,17 +213,40 @@
 
                         </h4>
 
+                        <div class="">
 
-                        {% if goal.progress >= 100 %}
-                        <span class="badge goal-status bg-success">
-                            Completed
-                        </span>
-                        {% else %}
-                        <span class="badge goal-status">
-                            Active
-                        </span>
-                        {% endif %}
+                            {% if goal.status == "Completed" %}
 
+                            <span class="status-badge completed">
+                                🟢 Completed
+                            </span>
+
+                            {% elif goal.status == "Overdue" %}
+
+                            <span class="status-badge overdue">
+                                🔴 Overdue
+                            </span>
+
+                            {% elif goal.status == "Due Soon" %}
+
+                            <span class="status-badge due-soon">
+                                🟡 Due Soon
+                            </span>
+
+                            {% else %}
+
+                            <span class="status-badge active">
+                                🔵 Active
+                            </span>
+
+                            {% endif %}
+
+                        </div>
+                        <!-- NOTE -->
+                        <!-- 🟢 Completed (target reached)
+                    🔴 Overdue (deadline passed without reaching the target)
+                    🟡 Due Soon (within 30 days)
+                    🔵 Active (everything else) -->
                     </div>
 
                     <i class="fa-solid fa-piggy-bank goal-icon"></i>
@@ -285,7 +321,7 @@
 
                 <div class="mt-4 d-flex gap-2">
 
-                    <button type="button" class="btn btn-outline-primary flex-fill" data-bs-toggle="modal"
+                    <button type="button" class="flex-fill rounded" data-bs-toggle="modal"
                         data-bs-target="#editGoal{{ goal.id }}">
 
                         <i class="fa-solid fa-pen me-2"></i>
@@ -293,7 +329,7 @@
 
                     </button>
 
-                    <button type="button" class="btn btn-outline-danger flex-fill">
+                    <button type="button" class="flex-fill rounded">
 
                         <i class="fa-solid fa-trash me-2"></i>
                         Delete
@@ -432,6 +468,88 @@
     </div> <!-- End row -->
 
 </div> <!-- End container -->
+
+
+<section class="goal-ideas-card mt-5">
+
+    <div class="goal-ideas-header">
+
+        <h3>
+            <i class="fa-solid fa-lightbulb me-2"></i>
+            Need some inspiration?
+        </h3>
+
+        <p>
+            Here are some popular financial goals you can start saving for today.
+        </p>
+
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="idea-item">
+                <i class="fa-solid fa-house"></i>
+                <h5>Emergency Fund</h5>
+                <p>Build a safety net covering 3–6 months of essential expenses.</p>
+            </div>
+
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="idea-item">
+                <i class="fa-solid fa-car"></i>
+                <h5>Buy a Car</h5>
+                <p>Save towards a deposit or purchase of your dream car.</p>
+            </div>
+
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="idea-item">
+                <i class="fa-solid fa-plane"></i>
+                <h5>Travel</h5>
+                <p>Plan ahead for your next holiday or family vacation.</p>
+            </div>
+
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="idea-item">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <h5>Education</h5>
+                <p>Save for school fees, certifications or professional courses.</p>
+            </div>
+
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="idea-item">
+                <i class="fa-solid fa-laptop"></i>
+                <h5>New Laptop</h5>
+                <p>Upgrade your technology without relying on debt.</p>
+            </div>
+
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="idea-item">
+                <i class="fa-solid fa-heart"></i>
+                <h5>Wedding</h5>
+                <p>Prepare for one of life's biggest milestones with confidence.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
 
 <!-- Modal -->

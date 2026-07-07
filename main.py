@@ -2,7 +2,10 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from database import (
     check_user_exists,
     create_user,
-    get_transactions,
+    get_transaction_summary,
+    update_transaction_db,
+    delete_transaction_db,
+    get_transaction_statistics,
     get_budgets,
     insert_goal_transaction,
     transactions_per_user,
@@ -19,8 +22,10 @@ from database import (
     update_goal_details,
     search_goals,
     get_categories,
-    get_savings_category
+    get_savings_category,
+    get_monthly_category_summary
 )
+from datetime import datetime, date
 from flask_bcrypt import Bcrypt
 from functools import wraps
 from dotenv import load_dotenv
@@ -113,9 +118,31 @@ def dashboard():
 @app.route('/transactions')
 @login_required
 def transactions():
-    transactions_data = get_transactions()
+    user_id = session["user_id"]
+
+    statistics = get_transaction_statistics(user_id)
+    transactions = transactions_per_user(user_id)
     categories = get_categories()
-    return render_template("transactions.html", transactions_data=transactions_data, categories=categories)
+
+    # For the summary cards
+    summary = get_transaction_summary(user_id)
+
+    # For the progress bars
+    monthly_summary = get_monthly_category_summary(user_id)
+    total_spent = sum(row[1] for row in monthly_summary)
+
+    category_summary = []
+
+    for category, amount in monthly_summary:
+        percentage = round((amount / total_spent) * 100) if total_spent else 0
+        category_summary.append((category, amount, percentage))
+
+    return render_template("transactions.html", transactions=transactions,categories=categories, category_summary=category_summary,
+        current_month=datetime.now().strftime("%B"),monthly_income=summary["income"],
+        monthly_expenses=summary["expenses"], net_savings=summary["net_savings"],
+        transaction_count=summary["transaction_count"],highest_category=statistics["highest_category"],
+        highest_income_category=statistics["highest_income_category"],largest_transaction=statistics["largest_transaction"],
+        most_used_category=statistics["most_used_category"])
 
 
 @app.route("/add_transaction", methods=['GET', 'POST'])
@@ -141,6 +168,40 @@ def add_transactions():
 
     return redirect(url_for("transactions"))
 
+@app.route("/update_transaction", methods=["POST"])
+@login_required
+def update_transaction():
+    user_id = session["user_id"]
+
+    transaction_id = request.form["transaction_id"]
+    category_id = request.form["category_id"]
+    transaction_type = request.form["type"]
+    amount = request.form["amount"]
+    description = request.form["description"]
+    transaction_date = request.form["transaction_date"]
+
+    update_transaction_db(
+        transaction_id,
+        user_id,
+        category_id,
+        transaction_type,
+        amount,
+        description,
+        transaction_date
+    )
+
+    return redirect(url_for("transactions"))
+
+
+@app.route("/delete_transaction/<int:id>")
+@login_required
+def delete_transaction(id):
+
+    delete_transaction_db(id)
+
+    return redirect(url_for("transactions"))
+
+
 
 @app.route('/budgets')
 @login_required
@@ -151,6 +212,7 @@ def budgets():
     categories = get_categories()
     budgets_data = get_all_budget_usage(user_id)
     return render_template("budgets.html", budgets_data=budgets_data,categories=categories)
+
 
 
 @app.route("/add_budget", methods=["POST"])
@@ -180,6 +242,7 @@ def goals():
     user_id = session["user_id"]
 
     search = request.args.get("search", "").strip()
+    status_filter = request.args.get("status")
 
     if search:
         goals = search_goals(user_id, search)
@@ -194,6 +257,7 @@ def goals():
     total_saved = 0
     total_target = 0
 
+    today = date.today()
     for goal in goals:
 
         goal_id = goal[0]
@@ -207,23 +271,40 @@ def goals():
         else:
             progress = 0
 
-        goals_with_progress.append({
+        # Determine goal status
+        if saved_amount >= target_amount:
+            status = "Completed"
+
+        elif deadline < today:
+            status = "Overdue"
+
+        elif (deadline - today).days <= 30:
+            status = "Due Soon"
+
+        else:
+            status = "Active"
+
+        goal_data ={
             "id": goal_id,
             "goal_name": goal_name,
             "target_amount": target_amount,
             "saved_amount": saved_amount,
             "deadline": deadline,
-            "progress": progress
-        })
+            "progress": progress,
+            "status": status
+        }
+
+        if status_filter is None or status == status_filter:
+            goals_with_progress.append(goal_data)
 
         total_saved += saved_amount
         total_target += target_amount
 
-        if progress >= 100:
+        if status == "Completed":
             completed_goals += 1
         else:
             active_goals += 1
-
+            
     # Overall progress across ALL goals
     if total_target > 0:
         overall_progress = round((total_saved / total_target) * 100)

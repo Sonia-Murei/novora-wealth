@@ -28,13 +28,24 @@ def get_transactions():
     transactions = cur.fetchall()
     return transactions
 
-def insert_transaction(values):
-    cur.execute(f"insert into transactions(user_id, category_id, type, amount, description, transaction_date) values{values}")
+def insert_transaction(user_id, category_id, transaction_type, amount, description, transaction_date):
+    cur.execute("""INSERT INTO transactions
+        (user_id, category_id, type, amount, description, transaction_date)
+        VALUES (%s, %s, %s, %s, %s, %s)
+    """, (
+        user_id,
+        category_id,
+        transaction_type,
+        amount,
+        description,
+        transaction_date
+    ))
+
     conn.commit()
 
 def transactions_per_user(user_id):
     cur.execute("""SELECT 
-                t.id, t.type, t.amount,
+                t.id,t.category_id, t.type, t.amount,
                 t.description, t.transaction_date, c.category_name
                 FROM transactions t
                 JOIN categories c ON t.category_id = c.id
@@ -45,9 +56,93 @@ def transactions_per_user(user_id):
 
     # NB: (user_id) is a tuple.
 
-    # if you're using Flask sessions, you'll typically call it like:
+    # if you're using Flask sessions, you call it like:
     # transactions = transactions_per_user(session["user_id"])
     # so that each user only sees their own transactions.
+
+def get_transaction_summary(user_id):
+    cur.execute("""
+        SELECT
+            COALESCE(SUM(CASE WHEN type = 'income' THEN amount END), 0) AS total_income,
+            COALESCE(SUM(CASE WHEN type = 'expense' THEN amount END), 0) AS total_expenses,
+            COUNT(*) AS transaction_count
+        FROM transactions WHERE user_id = %s
+        AND DATE_TRUNC('month', transaction_date) = DATE_TRUNC('month', CURRENT_DATE);
+    """, (user_id,))
+
+    result = cur.fetchone()
+
+    total_income = float(result[0])
+    total_expenses = float(result[1])
+    transaction_count = result[2]
+    net_savings = total_income - total_expenses
+
+    return {
+        "income": total_income,
+        "expenses": total_expenses,
+        "net_savings": net_savings,
+        "transaction_count": transaction_count
+    }
+
+# COALESCE(SUM(amount), 0) returns "0" instead of "null"
+
+def update_transaction_db(transaction_id, user_id, category_id, transaction_type,
+                          amount, description, transaction_date):
+    cur.execute(""" UPDATE transactions
+        SET category_id = %s, type = %s, amount = %s, description = %s, transaction_date = %s
+        WHERE id = %s AND user_id = %s;
+    """, (category_id, transaction_type, amount, description,
+        transaction_date, transaction_id, user_id))
+
+    conn.commit()
+
+def delete_transaction_db(id,user_id):
+    cur.execute("DELETE FROM transactions WHERE id=%s AND user_id=%s;",(id,), (user_id,))
+    conn.commit()
+
+
+def get_transaction_statistics(user_id):
+    stats = {}
+
+    # Highest spending category (expenses only)
+    cur.execute("""
+        SELECT c.category_name FROM transactions t
+        JOIN categories c ON t.category_id = c.id
+        WHERE t.user_id = %s AND t.type = 'expense'
+        GROUP BY c.category_name ORDER BY SUM(t.amount) DESC LIMIT 1;
+    """, (user_id,))
+
+    result = cur.fetchone()
+    stats["highest_category"] = result[0] if result else "N/A"
+
+    # Highest income category
+    cur.execute("""
+        SELECT c.category_name FROM transactions t
+        JOIN categories c ON t.category_id = c.id
+        WHERE t.user_id = %s AND t.type = 'income'
+        GROUP BY c.category_name ORDER BY SUM(t.amount) DESC LIMIT 1;
+    """, (user_id,))
+
+    result = cur.fetchone()
+    stats["highest_income_category"] = result[0] if result else "N/A"
+
+    # Largest single transaction
+    cur.execute("SELECT MAX(amount) FROM transactions WHERE user_id = %s;", (user_id,))
+
+    result = cur.fetchone()
+    stats["largest_transaction"] = float(result[0]) if result and result[0] else 0
+
+    # Most frequently used category
+    cur.execute("""
+        SELECT c.category_name FROM transactions t
+        JOIN categories c ON t.category_id = c.id WHERE t.user_id = %s
+        GROUP BY c.category_name ORDER BY COUNT(*) DESC LIMIT 1;
+    """, (user_id,))
+
+    result = cur.fetchone()
+    stats["most_used_category"] = result[0] if result else "N/A"
+
+    return stats
 
 # Budgets Queries:
 
@@ -212,10 +307,26 @@ def fetch_goal(goal_id):
     return cur.fetchone()
 
 def insert_goals(values):
-    cur.execute("""INSERT INTO goals(user_id, goal_name, target_amount, saved_amount, deadline)
-        VALUES (%s, %s, %s, %s, %s)""", values)
+    try:
+        cur.execute("""
+            INSERT INTO goals(
+                user_id,
+                goal_name,
+                target_amount,
+                saved_amount,
+                deadline)
+            VALUES (%s, %s, %s, %s, %s)
+        """, values)
 
-    conn.commit()
+        conn.commit()
+
+    except Exception as e:
+        conn.rollback()
+        print(e)
+        raise
+
+# This ensures that if an insert fails, the transaction is rolled back 
+# and future queries will work normally.
 
 def get_user_goals(user_id):
     cur.execute("""
@@ -303,3 +414,14 @@ def get_savings_category():
         return result[0]
 
     return None
+
+def get_monthly_category_summary(user_id):
+    cur.execute("""SELECT c.category_name, SUM(t.amount)
+    FROM transactions t JOIN categories c ON t.category_id = c.id
+    WHERE t.user_id = %s AND t.type = 'expense'
+        AND DATE_TRUNC('month', t.transaction_date) =
+            DATE_TRUNC('month', CURRENT_DATE)
+    GROUP BY c.category_name ORDER BY SUM(t.amount) DESC;""", (user_id,))
+
+    summary = cur.fetchall()
+    return summary
