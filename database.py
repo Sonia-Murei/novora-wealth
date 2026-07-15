@@ -54,6 +54,16 @@ def transactions_per_user(user_id):
     user_transactions = cur.fetchall()
     return user_transactions
 
+def get_transactions_by_category(user_id, category_id):
+
+    cur.execute("""SELECT t.id, c.category_name, t.type,
+            t.amount, t.description, t.transaction_date
+            FROM transactions t JOIN categories c ON t.category_id = c.id
+            WHERE t.user_id = %s AND t.category_id = %s
+            ORDER BY t.transaction_date DESC""", (user_id, category_id))
+
+    return cur.fetchall()
+
     # NB: (user_id) is a tuple.
 
     # if you're using Flask sessions, you call it like:
@@ -96,8 +106,8 @@ def update_transaction_db(transaction_id, user_id, category_id, transaction_type
 
     conn.commit()
 
-def delete_transaction_db(id,user_id):
-    cur.execute("DELETE FROM transactions WHERE id=%s AND user_id=%s;",(id,), (user_id,))
+def delete_transaction(transaction_id,user_id):
+    cur.execute("DELETE FROM transactions WHERE id=%s AND user_id=%s;",(transaction_id,user_id))
     conn.commit()
 
 
@@ -151,9 +161,24 @@ def get_budgets():
     budgets = cur.fetchall()
     return budgets
 
-def insert_budgets(values):
-    cur.execute(f"insert into budgets(user_id,category_id,limit_amount,month) values{values}")
-    conn.commit()
+def insert_budgets(user_id, category_id, limit_amount, month):
+    try:
+        cur.execute("""INSERT INTO budgets
+            (user_id,category_id,limit_amount,month) 
+            values(%s, %s, %s, %s)
+        """,(
+            user_id, 
+            category_id, 
+            limit_amount, 
+            month
+        ))
+
+        conn.commit()
+
+    except Exception as e:
+        conn.rollback()
+        print(e)
+        raise
 
 def budgets_per_user(user_id):
     cur.execute("""
@@ -188,12 +213,10 @@ def get_budget_by_category(user_id, category_id, month):
 
 def get_one_budget_usage(user_id, category_id, month):
     cur.execute("""
-        SELECT
-        b.limit_amount, COALESCE(SUM(t.amount), 0) AS spent
+        SELECT b.limit_amount, COALESCE(SUM(t.amount), 0) AS spent
         FROM budgets b LEFT JOIN transactions t
             ON b.category_id = t.category_id
-            AND b.user_id = t.user_id
-            AND t.type = 'expense'
+            AND b.user_id = t.user_id AND t.type = 'expense'
             AND DATE_TRUNC('month', t.transaction_date)
                 = DATE_TRUNC('month', b.month)
         WHERE b.user_id = %s AND b.category_id = %s AND b.month = %s
@@ -203,23 +226,29 @@ def get_one_budget_usage(user_id, category_id, month):
     result = cur.fetchone()
 
     if result:
-        limit_amount, spent = result #Equivalent to: limit_amount = result[0] and spent = result[1]
+        limit_amount, spent = result
+
         remaining = limit_amount - spent
+
+        progress = (spent / limit_amount * 100) if limit_amount > 0 else 0
+
+        if progress < 80:
+            status = "On Track"
+        elif progress < 100:
+            status = "Almost Over Budget"
+        else:
+            status = "Over Budget"
 
         return {
             "budget": limit_amount,
             "spent": spent,
-            "remaining": remaining
+            "remaining": remaining,
+            "progress": progress,
+            "status": status
         }
 
     return None #Returns when a user never created a budget for a specified category
 
-        # EXAMPLE OUTPUT:
-# {
-#     "budget": Decimal("10000.00"),
-#     "spent": Decimal("5500.00"),
-#     "remaining": Decimal("4500.00")
-# }
 
         # Query Breakdown:
 
@@ -252,7 +281,7 @@ def get_one_budget_usage(user_id, category_id, month):
 def get_all_budget_usage(user_id):
     cur.execute("""
         SELECT
-        b.id, c.category_name, b.limit_amount,
+        b.id, b.category_id, c.category_name,b.month, b.limit_amount,
         COALESCE(SUM(t.amount), 0) AS spent,
         b.limit_amount - COALESCE(SUM(t.amount), 0) AS remaining
         FROM budgets b JOIN categories c ON b.category_id = c.id
@@ -263,7 +292,7 @@ def get_all_budget_usage(user_id):
             AND DATE_TRUNC('month', t.transaction_date)
                 = DATE_TRUNC('month', b.month)
         WHERE b.user_id = %s
-        GROUP BY b.id, c.category_name, b.limit_amount
+        GROUP BY b.id, b.category_id, c.category_name,b.month, b.limit_amount
         ORDER BY c.category_name
     """, (user_id,))
 
@@ -289,6 +318,72 @@ def get_all_budget_usage(user_id):
 # Showing a list of all budgets
 # Creating charts and reports
 # Displaying a budget overview page
+
+
+def search_budgets(user_id, search):
+
+    cur.execute("""
+        SELECT
+            b.id,
+            b.category_id,
+            c.category_name,
+            b.month,
+            b.limit_amount,
+            COALESCE(SUM(t.amount),0) AS spent,
+            b.limit_amount - COALESCE(SUM(t.amount),0) AS remaining
+
+        FROM budgets b
+
+        JOIN categories c
+            ON b.category_id = c.id
+
+        LEFT JOIN transactions t
+            ON b.category_id = t.category_id
+            AND b.user_id = t.user_id
+            AND t.type='expense'
+            AND DATE_TRUNC('month',t.transaction_date)
+                = DATE_TRUNC('month',b.month)
+
+        WHERE
+
+            b.user_id = %s
+
+            AND
+
+            LOWER(c.category_name)
+            LIKE LOWER(%s)
+
+        GROUP BY
+            b.id,
+            b.category_id,
+            c.category_name,
+            b.month,
+            b.limit_amount
+
+        ORDER BY c.category_name
+
+    """, (user_id, f"%{search}%"))
+
+    return cur.fetchall()
+
+def update_budget(budget_id, limit_amount):
+
+    cur.execute("""
+        UPDATE budgets
+        SET limit_amount = %s
+        WHERE id = %s
+    """, (limit_amount, budget_id))
+
+    conn.commit()
+
+def delete_budget(budget_id):
+
+    cur.execute("""
+        DELETE FROM budgets
+        WHERE id = %s
+    """, (budget_id,))
+
+    conn.commit()
 
 # Goals Queries:
 
@@ -353,6 +448,11 @@ def update_goal_details(values):
         UPDATE goals SET goal_name = %s, target_amount = %s,
         saved_amount = %s, deadline = %s WHERE id = %s
     """, values)
+
+    conn.commit()
+
+def delete_goal(goal_id, user_id):
+    cur.execute("DELETE FROM goals WHERE id = %s AND user_id = %s", (goal_id, user_id))
 
     conn.commit()
 

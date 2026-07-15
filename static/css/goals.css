@@ -1,0 +1,382 @@
+/* GOALS PAGE */
+
+.goals-page{
+    padding-bottom:60px;
+}
+
+/* PAGE TITLE */
+
+.page-title{
+    color:#4b3d63;
+    font-weight:700;
+}
+
+.page-title i{
+    color:#8e6bbf;
+}
+
+/* SUMMARY CARDS */
+
+.summary-card{
+    background:#fff;
+    border-radius:18px;
+    padding:25px;
+    display:flex;
+    align-items:center;
+    gap:18px;
+    box-shadow:0 8px 20px rgba(0,0,0,.06);
+    transition:.3s ease;
+    border-left:6px solid #7A58A8;
+
+}
+
+.summary-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 12px 28px rgba(0,0,0,.12);
+}
+
+.summary-card h6{
+    color:#777;
+    margin-bottom:5px;
+}
+
+.summary-card h3{
+    color:#4b3d63;
+    font-weight:700;
+}
+
+/* ICON CIRCLE */
+
+.icon-circle{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    background:#7A58A8;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.icon-circle i{
+    color:white;
+    font-size:1.4rem;
+}
+
+/* FILTER CARD */
+
+.filter-card{
+    border:none;
+    border-radius:18px;
+    box-shadow:0 8px 20px rgba(0,0,0,.06);
+}
+
+/* Search */
+
+.input-group-text{
+    background:#8e6bbf;
+    color:white;
+    border:none;
+}
+
+.form-control{
+    border-radius:0 10px 10px 0;
+}
+
+.form-control:focus{
+    border-color:#8e6bbf;
+    box-shadow:0 0 0 .15rem rgba(142,107,191,.25);
+}
+
+/* FILTER BUTTONS */
+
+.btn-filter{
+    border:1px solid #d9c8f3;
+    color:#8e6bbf;
+    background:white;
+    border-radius:30px;
+    margin-left:8px;
+    padding:8px 18px;
+    transition:.3s;
+}
+
+.btn-filter:hover{
+    background:#8e6bbf;
+    color:white;
+}
+
+.btn-filter.active{
+    background:#8e6bbf;
+    color:white;
+}
+
+/* GOAL CARD */
+
+.goal-card{
+    background:white;
+    border-radius:20px;
+    padding:28px;
+    box-shadow:0 8px 20px rgba(0,0,0,.06);
+    transition:.3s ease;
+}
+
+.goal-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 12px 28px rgba(0,0,0,.12);
+}
+
+.goal-title{
+    color:#4b3d63;
+    font-weight:700;
+}
+
+.goal-icon{
+    font-size:2rem;
+    color:#8e6bbf;
+}
+
+/* STATUS BADGE */
+
+.goal-status{
+    background:#efe6fb;
+    color:#8e6bbf;
+    font-weight:600;
+    padding:8px 14px;
+    border-radius:20px;
+}
+
+/* GOAL INFO */
+
+.goal-info{
+    display:grid;
+    grid-template-columns:repeat(3,1fr); /*creates 3 equal-width columns.*/
+    gap:20px;
+}
+
+.goal-info small{
+    color:#888;
+}
+
+.goal-info h6{
+    font-weight:700;
+    color:#4b3d63;
+    margin-top:5px;
+}
+
+/*PROGRESS BAR*/
+.progress{
+    height:14px;
+    background:#e9dff6;
+    border-radius:999px;
+    overflow:hidden;
+}
+
+.progress .progress-bar{
+    background:#74058b;
+    color:white;
+    font-size:.75rem;
+    font-weight:600;
+    transition:width .8s ease; /*Adds animation */
+}
+
+/*DEADLINE */
+
+.deadline{
+    color:#666;
+    font-size:.95rem;
+}
+
+.deadline strong{
+    color:#4b3d63;
+}
+
+/* BUTTONS */
+
+.btn-primary{
+    background:#8e6bbf;
+    border:none;
+}
+
+.btn-primary:hover{
+    background:#7a58a8;
+}
+
+.btn{
+    border-radius:10px;
+}
+
+/* ==========================
+   GOAL IDEAS
+========================== */
+
+.goal-ideas-card{
+
+    background:#fff;
+    border-radius:20px;
+    padding:35px;
+    margin-top:40px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+}
+
+.goal-ideas-header{
+
+    text-align:center;
+    margin-bottom:35px;
+
+}
+
+.goal-ideas-header h3{
+
+    color:#7A58A8;
+    font-weight:700;
+
+}
+
+.goal-ideas-header p{
+
+    color:#777;
+    margin-top:8px;
+
+}
+
+.idea-item{
+
+    text-align:center;
+    padding:25px;
+    border-radius:15px;
+    background:#faf8fd;
+    border:1px solid #ece4f6;
+    transition:.3s;
+
+}
+
+.idea-item:hover{
+
+    transform:translateY(-6px);
+    box-shadow:0 10px 25px rgba(122,88,168,.15);
+
+}
+
+.idea-item i{
+
+    width:65px;
+    height:65px;
+
+    line-height:65px;
+
+    border-radius:50%;
+
+    background:#7A58A8;
+    color:white;
+
+    font-size:1.5rem;
+    margin-bottom:18px;
+
+}
+
+.idea-item h5{
+
+    font-weight:700;
+    margin-bottom:10px;
+
+}
+
+.idea-item p{
+
+    color:#666;
+    font-size:.92rem;
+    margin-bottom:0;
+
+}
+
+/* ======================================================
+   MODALS
+====================================================== */
+
+.modal-content{
+
+    border:none;
+    border-radius:18px;
+
+}
+
+.modal-header{
+
+    background:#8e6bbf;
+    color:white;
+
+}
+
+.modal-header .btn-close{
+
+    filter:invert(1);
+
+}
+
+/* EMPTY STATE */
+
+.empty-state{
+    background:white;
+    border-radius:20px;
+    padding:60px;
+    text-align:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.06);
+}
+
+.empty-state i{
+    font-size:4rem;
+    color:#8e6bbf;
+    margin-bottom:20px;
+}
+
+.empty-state h3{
+    color:#4b3d63;
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+.empty-state p{
+    color:#777;
+    max-width:500px;
+    margin:auto;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:992px){
+    .goal-info{
+        grid-template-columns:1fr;
+    }
+    .summary-card{
+        justify-content:center;
+        text-align:center;
+        flex-direction:column;
+    }
+}
+
+@media(max-width:768px){
+    .page-title{
+        font-size:1.8rem;
+    }
+    .btn-filter{
+        margin-top:8px;
+    }
+    .goal-card{
+        padding:22px;
+    }
+}
+.summary-card{
+    min-height:140px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.summary-card h3{
+    font-size:1.6rem;
+    white-space:nowrap;
+}
+

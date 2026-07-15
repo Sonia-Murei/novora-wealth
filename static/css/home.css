@@ -1,0 +1,167 @@
+/* Hero Section */
+.hero-section {
+    min-height: 55vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-btn {
+    background-color: #8e6bbf !important;
+    color: white !important;
+    border: none !important;
+}
+
+.hero-btn:hover {
+    background-color: #7a58a8 !important;
+    color: white !important;
+}
+/* Quick Start Cards */
+.quick-card {
+    border: none;
+    min-height: 200px;
+    border-radius: 15px;
+    transition: 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.quick-card:hover {
+    transform: translateY(-5px);
+}
+
+.quick-card:hover .card-header,
+.quick-card:hover .card-body {
+    background-color: #7a58a8;
+    color: white;
+}
+
+.quick-card:hover .card-header {
+    border-bottom: 2px solid white;
+}
+
+.quick-card h5 {
+    color: #8e6bbf;
+}
+.quick-card .card-header {
+    border-bottom: 2px solid #8e6bbf;
+}
+/* Tip Card */
+.tip-card {
+    border-left: 6px solid #8e6bbf !important;
+    background: #f8f5fc !important;
+    min-height: 220px;
+    border-radius: 15px;
+}
+
+/* More space at the top */
+.tip-card .card-body {
+    padding: 3rem 2rem 2rem;
+}
+
+/* Bigger heading */
+.tip-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #5d3d86;
+    margin-bottom: 1.5rem;
+}
+
+/* Bigger body text */
+.tip-text {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #444;
+}
+.goal-section {
+    background-color: #f8f5fc;
+}
+/* All Primary Buttons */
+.btn-primary {
+    background-color: #8e6bbf !important;
+    border-color: #8e6bbf !important;
+    color: white !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Hover */
+.btn-primary:hover {
+    background-color: #7551a5 !important;
+    border-color: #7551a5 !important;
+    color: white !important;
+}
+
+/* Focus */
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary:focus-visible {
+    background-color: #7551a5 !important;
+    border-color: #7551a5 !important;
+    box-shadow: 0 0 0 0.25rem rgba(142, 107, 191, 0.35) !important;
+}
+
+/* Disabled */
+.btn-primary:disabled {
+    background-color: #b49ad7 !important;
+    border-color: #b49ad7 !important;
+}
+
+/* Modal Form Inputs */
+/* .form-control,
+.form-select {
+    background-color: #f8f5fc !important;
+    border: 1px solid #d8c8ec !important;
+    color: #333 !important;
+} */
+
+/* Placeholder text */
+/* .form-control::placeholder {
+    color: #8f8f8f !important;
+} */
+
+/* Focus effect */
+.form-control:focus,
+.form-select:focus {
+    background-color: #fcfaff !important;
+    border-color: #8e6bbf !important;
+    box-shadow: 0 0 0 0.2rem rgba(142, 107, 191, 0.25) !important;
+}
+
+.form-card {
+    background-color: #f8f5fc;
+    border: 1px solid #e5d8f5;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+.form-card h2 {
+    color: #6f4fa5;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #d8c8ec;
+    padding-bottom: 0.75rem;
+}
+.empty-state{
+    background:white;
+    border-radius:18px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    padding:60px 30px;
+    text-align:center;
+}
+
+.empty-state i{
+    font-size:4rem;
+    color:#8e6bbf;
+    margin-bottom:20px;
+}
+
+.empty-state h3{
+    color:#4b3d63;
+    margin-bottom:10px;
+}
+
+.empty-state p{
+    color:#777;
+    max-width:500px;
+    margin:0 auto;
+}

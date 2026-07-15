@@ -1,4 +1,10 @@
 {% extends 'base.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/goals.css') }}">
+{% endblock %}
+
+
 {% block title %} Goals | Novora Wealth {% endblock %}
 {% block content %}
 
@@ -127,7 +133,7 @@
 
 
 
-    <!-- ================= SEARCH + FILTER ================= -->
+    <!-- ================= SEARCH & FILTER ================= -->
 
     <div class="card filter-card mb-4">
 
@@ -139,7 +145,7 @@
 
                     <form method="GET" action="{{ url_for('goals') }}" class="mb-4">
 
-                        <div class="input-group">
+                        <div class="input-group mt-3">
 
                             <input type="text" name="search" class="form-control" placeholder="Search goals..."
                                 value="{{ request.args.get('search', '') }}">
@@ -329,7 +335,8 @@
 
                     </button>
 
-                    <button type="button" class="flex-fill rounded">
+                    <button type="button" class="flex-fill rounded" data-bs-toggle="modal"
+                        data-bs-target="#deleteGoal{{ goal.id }}">
 
                         <i class="fa-solid fa-trash me-2"></i>
                         Delete
@@ -437,6 +444,82 @@
 
             </div>
 
+            <!-- ================= DELETE GOAL MODAL ================= -->
+
+            {% for goal in goals %}
+
+            <div class="modal fade" id="deleteGoal{{ goal.id }}" tabindex="-1">
+
+                <div class="modal-dialog">
+
+                    <div class="modal-content">
+
+                        <form action="/delete_goal/{{ goal.id }}" method="POST">
+
+                            <div class="modal-header">
+
+                                <h5>
+
+                                    Delete Goal
+
+                                </h5>
+
+                                <button type="button" class="btn-close" data-bs-dismiss="modal">
+
+                                </button>
+
+                            </div>
+
+                            <div class="modal-body">
+
+                                <p>
+
+                                    Are you sure you want to delete the goal
+
+                                    <strong>
+
+                                        "{{ goal.goal_name }}"
+
+                                    </strong>
+
+                                    ?
+
+                                </p>
+
+                                <small class="text-muted">
+
+                                    This action cannot be undone.
+
+                                </small>
+
+                            </div>
+
+                            <div class="modal-footer">
+
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+
+                                    Cancel
+
+                                </button>
+
+                                <button type="submit" class="btn btn-danger">
+
+                                    Delete
+
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
         </div>
 
         {% else %}
@@ -532,7 +615,7 @@
             <div class="idea-item">
                 <i class="fa-solid fa-laptop"></i>
                 <h5>New Laptop</h5>
-                <p>Upgrade your technology without relying on debt.</p>
+                <p>Upgrade your current technology without relying on debt.</p>
             </div>
 
         </div>

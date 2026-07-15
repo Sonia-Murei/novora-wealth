@@ -1,0 +1,455 @@
+/* ======================================================
+   BUDGETS PAGE
+====================================================== */
+
+.budget-page-title{
+    color:#8e6bbf;
+    font-weight:700;
+}
+
+
+/* ======================================================
+   ADD BUTTON
+====================================================== */
+
+.budget-add-btn{
+
+    background:#8e6bbf !important;
+    color:white !important;
+    border:none !important;
+    border-radius:10px !important;
+    padding:10px 20px !important;
+    transition:.3s !important;
+
+}
+
+.budget-add-btn:hover{
+
+    background:#7a58a8;
+    color:white;
+    transform:translateY(-2px);
+
+}
+
+
+/* ======================================================
+   SUMMARY CARDS
+====================================================== */
+
+.budget-summary-card{
+
+    border:none !important;
+    border-radius:18px !important;
+    background:white ;
+    box-shadow:0 5px 18px rgba(0,0,0,.08) !important;
+    transition:.3s;
+    border-left:6px solid #7A58A8 !important;
+    max-height: 200px;
+
+}
+
+.budget-summary-card:hover{
+
+    transform:translateY(-6px);
+    box-shadow:0 12px 28px rgba(142,107,191,.18) !important;
+
+}
+
+.budget-summary-card .card-body{
+
+    padding:30px;
+    text-align:center;
+
+}
+
+.budget-summary-card h6{
+
+    color:#777;
+    margin-top:15px;
+
+}
+
+.budget-summary-card h4{
+
+    font-weight:bold;
+
+}
+
+.budget-category {
+
+    color:#34126e !important
+}
+
+.budget-summary-icon{
+
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    background:#f5effc;
+    color:#8e6bbf;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    margin:auto;
+
+    font-size:1.8rem;
+
+}
+
+
+/* ======================================================
+   SEARCH
+====================================================== */
+
+.budget-search-card{
+
+    border:none;
+    border-radius:18px;
+    box-shadow:0 5px 15px rgba(0,0,0,.07);
+
+}
+
+.budget-search-card .input-group-text{
+
+    background:#8e6bbf;
+    color:white;
+    border:none;
+
+}
+
+.budget-search-card .form-control{
+
+    border-left:none;
+
+}
+
+.budget-search-card .form-control:focus{
+
+    border-color:#8e6bbf;
+    box-shadow:none;
+
+}
+
+
+/* ======================================================
+   CLICKABLE CARDS
+====================================================== */
+
+.budget-card-link{
+
+    text-decoration:none;
+    color:inherit;
+
+}
+
+.budget-card-link:hover{
+
+    color:inherit;
+
+}
+
+.budget-table-card{
+
+    
+    border-radius:18px;
+    box-shadow:0 6px 18px rgba(0,0,0,.08);
+    transition:.35s;
+
+}
+
+.budget-table-card:hover{
+
+    transform:translateY(-8px);
+    box-shadow:0 16px 35px rgba(142,107,191,.22);
+
+}
+
+.budget-category{
+
+    color:#444;
+    font-weight:700;
+
+}
+
+.budget-spending{
+
+    font-size:1.05rem;
+
+}
+
+.budget-progress .progress{
+
+    height:14px;
+    border-radius:30px;
+    background:#ececec;
+
+}
+
+.budget-progress .progress-bar{
+
+    transition:width .8s ease;
+
+}
+
+.budget-view-link{
+
+    color:#8e6bbf;
+    font-weight:600;
+
+}
+
+
+/* ======================================================
+   EMPTY STATE
+====================================================== */
+
+.budget-empty-card{
+
+    border:none;
+    border-radius:18px;
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+
+}
+
+.budget-empty-icon{
+
+    font-size:4rem;
+    color:#8e6bbf;
+
+}
+
+
+/* ======================================================
+   TABLE
+====================================================== */
+
+.budget-table-card{
+
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+
+}
+
+.budget-table-header{
+
+    background:#2e2d2d;
+    color:white;
+    border-radius:18px 18px 0 0;
+
+}
+
+.budget-table-card table{
+
+    margin-bottom:0;
+
+}
+
+.budget-table-card thead th{
+
+    background:#8e6bbf;
+    color:white;
+    border:none;
+
+}
+
+.budget-table-card tbody td{
+
+    vertical-align:middle;
+
+}
+
+.budget-table-card tbody tr{
+
+    transition:.25s;
+
+}
+
+.budget-table-card tbody tr:hover{
+
+    background:#faf7fd;
+
+}
+
+
+/* ======================================================
+   ACTION BUTTONS
+====================================================== */
+
+.budget-table-card .btn-outline-primary{
+
+    border-color:#8e6bbf;
+    color:#8e6bbf;
+
+}
+
+.budget-table-card .btn-outline-primary:hover{
+
+    background:#8e6bbf;
+    color:white;
+
+}
+
+.budget-table-card .btn-outline-danger:hover{
+
+    color:white;
+
+}
+
+
+/* ======================================================
+   INSIGHTS
+====================================================== */
+
+.budget-insight-card{
+
+    border:none;
+    border-radius:18px;
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+    transition:
+        transform 0.35s ease,
+        box-shadow 0.35s ease;
+
+}
+
+.budget-insight-card:hover {
+
+    transform:translateY(-8px);
+    box-shadow:0 16px 35px rgba(142,107,191,.22);
+    
+}
+
+.budget-tip{
+
+    display:flex;
+    align-items:flex-start;
+    gap:15px;
+
+}
+
+.budget-tip i{
+
+    font-size:1.6rem;
+    color:#8e6bbf;
+    margin-top:4px;
+
+}
+
+.budget-tip h6{
+
+    font-weight:600;
+
+}
+
+.budget-tip p{
+
+    margin-bottom:0;
+    color:#666;
+
+}
+
+
+/* ======================================================
+   MODALS
+====================================================== */
+
+.modal-content{
+
+    border:none;
+    border-radius:18px;
+
+}
+
+.modal-header{
+
+    background:#8e6bbf;
+    color:white;
+
+}
+
+.modal-header .btn-close{
+
+    filter:invert(1);
+
+}
+.btn-primary{
+    background:#8e6bbf !important;
+    color:white !important;
+    border:none !important;
+    border-radius:10px !important;
+    padding:10px 20px !important;
+    transition:.3s !important;
+}
+
+.btn-primary:hover{
+    background:#7a58a8 !important;
+    color:white;
+    transform:translateY(-2px) !important;
+}
+
+
+/* ======================================================
+   BADGES
+====================================================== */
+
+.budget-card .badge,
+.budget-table-card .badge{
+
+    padding:8px 12px;
+    font-size:.8rem;
+    font-weight:600;
+
+}
+
+
+/* ======================================================
+   RESPONSIVE
+====================================================== */
+
+@media(max-width:992px){
+
+    .budget-summary-card{
+
+        margin-bottom:15px;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .budget-page-title{
+
+        font-size:1.8rem;
+
+    }
+
+    .budget-card{
+
+        margin-bottom:20px;
+
+    }
+
+    .budget-summary-card .card-body{
+
+        padding:25px;
+
+    }
+
+}
+
+@media(max-width:576px){
+
+    .budget-summary-card h3{
+
+        font-size:1.4rem;
+
+    }
+
+    .budget-category{
+
+        font-size:1.15rem;
+
+    }
+
+}

@@ -1,0 +1,476 @@
+/* TRANSACTIONS SECTION */
+
+.transactions-section{
+    background:#ffffff;
+    padding:30px;
+    border-radius:18px;
+    box-shadow:0 8px 24px rgba(0,0,0,.08);
+}
+
+
+/* HEADER */
+
+.transactions-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    margin-bottom:25px;
+}
+
+.transactions-header h2{
+    color:#7A58A8;
+    font-weight:700;
+    margin-bottom:5px;
+}
+
+.transactions-header p{
+    color:#6c757d;
+    margin:0;
+}
+
+
+/* TABLE */
+
+.transactions-table{
+    margin-bottom:0;
+}
+
+.transactions-table thead th {
+    background-color: #7A58A8 !important;
+    color: white !important;
+    border: none;
+    padding: 16px;
+}
+
+.transactions-table tbody tr{
+    transition:.25s;
+}
+
+.transactions-table tbody tr:hover{
+    background:#f7f2fc;
+}
+
+.transactions-table td{
+    vertical-align:middle;
+    padding:16px;
+}
+
+
+/* CATEGORY */
+
+.category-pill{
+    background:#ede4f8;
+    color:#7A58A8;
+    padding:6px 14px;
+    border-radius:25px;
+    font-weight:600;
+    font-size:.9rem;
+}
+
+
+/* BADGES */
+
+.income-badge{
+    background:#28a745 !important;
+    color:white;
+}
+
+.expense-badge{
+    background:#dc3545 !important;
+    color:white;
+}
+
+
+/* ===========================
+   AMOUNT
+=========================== */
+
+.amount{
+
+    font-weight:700;
+    font-size:14px;
+}
+
+
+/* BUTTONS */
+
+.btn-primary{
+    background:#8e6bbf !important;
+    color:white !important;
+    border:none !important;
+    border-radius:10px !important;
+    padding:10px 20px !important;
+    transition:.3s !important;
+}
+
+.btn-primary:hover{
+    background:#7a58a8 !important;
+    color:white;
+    transform:translateY(-2px) !important;
+}
+
+
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+.transactions-header{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:15px;
+}
+
+.search-box{
+    width:100%;
+    
+}
+
+}
+.spending-card{
+
+    background:white !important;
+    border-radius:18px !important;
+    padding:30px !important;
+    margin-bottom:30px !important;
+    box-shadow:0 8px 24px rgba(0,0,0,.08) !important;
+
+}
+
+.spending-card h3{
+
+    color:#7A58A8;
+    font-weight:700;
+
+}
+
+.category-progress{
+
+    margin-bottom:25px;
+
+}
+
+.progress{
+
+    height:14px !important;
+    border-radius:20px !important;
+    background:#ebe5f5 !important;
+
+}
+
+.progress-bar{
+    font-weight:600 !important;
+    font-size:.75rem !important;
+}
+
+.progress-colour-0{
+    background:#de10b1 !important;
+}
+
+.progress-colour-1{
+    background:#4CAF50 !important;
+}
+
+.progress-colour-2{
+    background:#FF9800 !important;
+}
+
+.progress-colour-3{
+    background:#2196F3 !important;
+}
+
+.progress-colour-4{
+    background:#E91E63 !important;
+}
+
+.progress-colour-5{
+    background:#009688 !important;
+}
+
+/* ===================================
+   SUMMARY CARDS
+=================================== */
+
+.summary-card{
+
+    background:#ffffff;
+    border-radius:18px;
+    padding:25px;
+    display:flex;
+    align-items:center;
+    gap:20px;
+    min-height: 150px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    transition:.3s ease;
+    border-left:6px solid #7A58A8;
+}
+
+.summary-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 15px 35px rgba(122,88,168,.18);
+
+}
+
+.summary-icon{
+
+    width:65px;
+    height:65px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.5rem;
+    color:white;
+}
+
+.summary-details{
+
+    flex:1;
+
+}
+
+.summary-details p{
+
+    margin-bottom:6px;
+    color:#777;
+    font-size:.95rem;
+
+}
+
+.summary-details h3{
+
+    margin:0;
+    font-weight:700;
+    color:#333;
+
+}
+
+
+/* Individual colours */
+
+.income-card .summary-icon{
+
+    background:#28a745;
+
+}
+
+.expense-card .summary-icon{
+
+    background:#dc3545;
+
+}
+
+.savings-card .summary-icon{
+
+    background:#FF9800;
+
+}
+
+.transaction-card .summary-icon{
+
+    background:#17a2b8;
+
+}
+
+/* ==========================
+   ACTION BUTTONS
+========================== */
+
+.action-btn{
+
+    width:38px;
+    height:38px;
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+    text-decoration:none;
+
+    margin:0 4px;
+
+    transition:all .25s ease;
+
+}
+
+/* Edit */
+
+.edit-btn{
+
+    color:#7A58A8;
+    background:#efe8fa;
+
+}
+
+.edit-btn:hover{
+
+    background:#7A58A8;
+    color:white;
+
+    transform:translateY(-3px);
+
+    box-shadow:0 8px 18px rgba(122,88,168,.35);
+
+}
+
+/* Delete */
+
+.delete-btn{
+
+    color:#dc3545;
+    border: none;
+    background:#fdeaea;
+
+}
+
+.delete-btn:hover{
+
+    background:#dc3545;
+    color:white;
+
+    transform:translateY(-3px);
+
+    box-shadow:0 8px 18px rgba(220,53,69,.35);
+
+}
+
+.transaction-modal-header{
+    background:#7A58A8;
+    color:white;
+}
+
+.transaction-modal-header .btn-close{
+    filter:invert(1);
+}
+
+.btn-save{
+    background:#7A58A8;
+    border:none;
+    color:white;
+}
+
+.btn-save:hover{
+    background:#684694;
+}
+
+.statistics-card{
+
+    background:#fff;
+    border-radius:18px;
+    padding:30px;
+    margin-top:30px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+}
+
+.statistics-card h3{
+
+    color:#7A58A8;
+    margin-bottom:25px;
+    font-weight:700;
+
+}
+
+.stat-item{
+
+    display:flex;
+    align-items:center;
+    gap:18px;
+    margin-bottom:22px;
+
+}
+
+.stat-item:last-child{
+
+    margin-bottom:0;
+
+}
+
+.stat-icon{
+
+    width:55px;
+    height:55px;
+
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:white;
+    font-size:1.2rem;
+
+}
+
+.stat-info{
+
+    flex:1;
+
+}
+
+.stat-info h6{
+
+    margin-bottom:4px;
+    color:#666;
+
+}
+
+.stat-info p{
+
+    margin:0;
+    font-size:1.05rem;
+    font-weight:600;
+
+}
+
+.purple{
+
+    background:#7A58A8;
+
+}
+
+.green{
+
+    background:#4CAF50;
+
+}
+
+.orange{
+
+    background:#FF9800;
+
+}
+
+.blue{
+
+    background:#2196F3;
+
+}
+
+/* ======================================================
+   MODALS
+====================================================== */
+
+.modal-content{
+
+    border:none;
+    border-radius:18px;
+
+}
+
+.modal-header{
+
+    background:#8e6bbf;
+    color:white;
+
+}
+
+.modal-header .btn-close{
+
+    filter:invert(1);
+
+}

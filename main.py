@@ -4,14 +4,18 @@ from database import (
     create_user,
     get_transaction_summary,
     update_transaction_db,
-    delete_transaction_db,
+    delete_transaction,
     get_transaction_statistics,
     get_budgets,
     insert_goal_transaction,
     transactions_per_user,
     insert_transaction,
+    get_transactions_by_category,
     get_one_budget_usage,
     get_all_budget_usage,
+    search_budgets,
+    update_budget,
+    delete_budget,
     budgets_per_user,
     get_budget_by_category,
     insert_budgets,
@@ -20,6 +24,7 @@ from database import (
     get_user_goals,
     update_goal_progress,
     update_goal_details,
+    delete_goal,
     search_goals,
     get_categories,
     get_savings_category,
@@ -120,9 +125,20 @@ def dashboard():
 def transactions():
     user_id = session["user_id"]
 
+    category_id = request.args.get("category_id")
+
     statistics = get_transaction_statistics(user_id)
-    transactions = transactions_per_user(user_id)
+
+
+    if category_id:
+        transactions = get_transactions_by_category(user_id, category_id)
+    else:
+        transactions = transactions_per_user(user_id)
+
+
     categories = get_categories()
+
+    
 
     # For the summary cards
     summary = get_transaction_summary(user_id)
@@ -193,25 +209,107 @@ def update_transaction():
     return redirect(url_for("transactions"))
 
 
-@app.route("/delete_transaction/<int:id>")
+@app.route("/delete_transaction/<int:transaction_id>", methods=["POST"])
 @login_required
-def delete_transaction(id):
+def delete_transaction_route(transaction_id):
 
-    delete_transaction_db(id)
+    delete_transaction(transaction_id, session["user_id"])
+
+    flash("Transaction deleted successfully!", "success")
 
     return redirect(url_for("transactions"))
 
 
 
-@app.route('/budgets')
+@app.route("/budgets")
 @login_required
 def budgets():
-    print(session)
+
     user_id = session["user_id"]
 
+    search = request.args.get("search", "").strip()
+
+    # Categories for the Add Budget modal
     categories = get_categories()
-    budgets_data = get_all_budget_usage(user_id)
-    return render_template("budgets.html", budgets_data=budgets_data,categories=categories)
+
+    # Budget usage for all categories
+    if search:
+        budgets = search_budgets(user_id, search)
+    else:
+        budgets = get_all_budget_usage(user_id)
+
+    budget_data = []
+
+    total_budget = 0
+    total_spent = 0
+    over_budget = 0
+
+    largest_category = "N/A"
+    largest_spent = 0
+
+    for budget in budgets:
+
+        (
+            budget_id,
+            category_id,
+            category_name,
+            month,
+            limit_amount,
+            spent,
+            remaining
+        ) = budget
+
+        # Calculate progress percentage
+        progress = (spent / limit_amount * 100) if limit_amount else 0
+
+        # Determine status and colour
+        if progress < 80:
+            status = "On Track"
+            color = "success"
+
+        elif progress < 100:
+            status = "Almost Over Budget"
+            color = "warning"
+
+        else:
+            status = "Over Budget"
+            color = "danger"
+            over_budget += 1
+
+        # Track largest spending category
+        if spent > largest_spent:
+            largest_spent = spent
+            largest_category = category_name
+
+        total_budget += limit_amount
+        total_spent += spent
+
+        budget_data.append({
+
+            "id": budget_id,
+            "category_id": category_id,
+            "category": category_name,
+            "month": month,
+            "limit": limit_amount,
+            "spent": spent,
+            "remaining": remaining,
+
+            # Cap the progress bar at 100%
+            "progress": min(progress, 100),
+
+            # Display the real percentage
+            "actual_progress": progress,
+
+            "status": status,
+            "color": color
+
+        })
+
+    total_remaining = total_budget - total_spent
+
+    return render_template("budgets.html",budgets=budget_data,categories=categories,
+        total_budget=total_budget,total_spent=total_spent,total_remaining=total_remaining,
+        over_budget=over_budget,largest_category=largest_category)
 
 
 
@@ -225,12 +323,41 @@ def add_budget():
     limit_amount = request.form["limit_amount"]
     month = request.form["month"]
 
+    month = month + "-01"   
+
     insert_budgets(
         user_id,
         category_id,
         limit_amount,
         month
     )
+
+    return redirect(url_for("budgets"))
+
+
+@app.route("/update_budget/<int:budget_id>", methods=["POST"])
+@login_required
+def update_budget_route(budget_id):
+
+    limit_amount = request.form["limit_amount"]
+
+    update_budget(
+        budget_id,
+        limit_amount
+    )
+
+    flash("Budget updated successfully!", "success")
+
+    return redirect(url_for("budgets"))
+
+
+@app.route("/delete_budget/<int:budget_id>", methods=["POST"])
+@login_required
+def delete_budget_route(budget_id):
+
+    delete_budget(budget_id)
+
+    flash("Budget deleted successfully!", "success")
 
     return redirect(url_for("budgets"))
 
@@ -387,6 +514,16 @@ def update_goal(goal_id):
                 difference,
                 f"Goal Contribution - {goal_name}"
             )
+
+    return redirect(url_for("goals"))
+
+@app.route("/delete_goal/<int:goal_id>", methods=["POST"])
+@login_required
+def delete_goal_route(goal_id):
+
+    delete_goal(goal_id, session["user_id"])
+
+    flash("Goal deleted successfully!", "success")
 
     return redirect(url_for("goals"))
 

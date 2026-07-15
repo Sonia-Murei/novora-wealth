@@ -1,14 +1,723 @@
-{% extends 'base.html' %}
-{% block title %} Budgets {% endblock %}
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/budgets.css') }}">
+{% endblock %}
+
+{% block title %}Budgets{% endblock %}
+
 {% block content %}
 
-<div>
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary mt-4 ms-4" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Add a Budget
-    </button>
+<div class="container py-4">
 
-    <!-- Modal -->
+    <!-- ======================== PAGE HEADER ======================== -->
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+
+        <div>
+
+            <h2 class="budget-page-title">
+                Monthly Budgets
+            </h2>
+
+            <p class="text-muted mb-0">
+                Track your spending and stay within your monthly budget goals.
+            </p>
+
+        </div>
+
+        <button class="btn budget-add-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
+
+            <i class="fa-solid fa-plus"></i>
+
+            Add Budget
+
+        </button>
+
+    </div>
+
+
+    <!-- ======================== SUMMARY CARDS ========================== -->
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card budget-summary-card">
+
+                <div class="card-body">
+
+                    <div class="budget-summary-icon">
+
+                        <i class="fa-solid fa-wallet"></i>
+
+                    </div>
+
+                    <h6>Total Budget</h6>
+
+                    <h4>
+
+                        KES {{ "{:,.2f}".format(total_budget) }}
+
+                    </h4>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card budget-summary-card">
+
+                <div class="card-body">
+
+                    <div class="budget-summary-icon">
+
+                        <i class="fa-solid fa-money-bill-wave"></i>
+
+                    </div>
+
+                    <h6>Total Spent</h6>
+
+                    <h4>
+
+                        KES {{ "{:,.2f}".format(total_spent) }}
+
+                    </h4>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card budget-summary-card">
+
+                <div class="card-body">
+
+                    <div class="budget-summary-icon">
+
+                        <i class="fa-solid fa-piggy-bank"></i>
+
+                    </div>
+
+                    <h6>Remaining</h6>
+
+                    <h4>
+
+                        KES {{ "{:,.2f}".format(total_remaining) }}
+
+                    </h4>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card budget-summary-card">
+
+                <div class="card-body">
+
+                    <div class="budget-summary-icon">
+
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+
+                    </div>
+
+                    <h6>Over Budget</h6>
+
+                    <h4>
+
+                        {{ over_budget }}
+
+                    </h4>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================== SEARCH BAR =========================== -->
+
+    <div class="card budget-search-card mb-4">
+
+        <div class="card-body">
+
+            <form method="GET">
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                    </span>
+
+                    <input type="text" class="form-control" name="search" placeholder="Search budgets..."
+                        value="{{ request.args.get('search','') }}">
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================= BUDGET CARDS ======================== -->
+
+    {% if budgets %}
+
+    <div class="row">
+
+        {% for budget in budgets %}
+
+        <div class="col-lg-6 mb-4">
+
+            <a href="{{ url_for('transactions', category_id=budget.category_id) }}" class="budget-card-link">
+
+                <div class="card budget-card">
+
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <h4 class="budget-category">
+
+                                    {{ budget.category }}
+
+                                </h4>
+
+                                <small class="text-muted">
+
+                                    Monthly Budget
+
+                                </small>
+
+                            </div>
+
+                            <span class="badge bg-{{ budget.color }}">
+
+                                {{ budget.status }}
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="budget-spending mt-4">
+
+                            <strong>
+
+                                KES {{ "{:,.2f}".format(budget.spent) }}
+
+                            </strong>
+
+                            <span class="text-muted">
+
+                                of
+
+                                KES {{ "{:,.2f}".format(budget.limit) }}
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="budget-progress mt-3">
+
+                            <div class="progress">
+
+                                <div class="progress-bar bg-{{ budget.color }}" style="width: {{ budget.progress }}%;">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row text-center mt-4">
+
+                            <div class="col-6">
+
+                                <small class="text-muted">
+
+                                    Remaining
+
+                                </small>
+
+                                <h6>
+
+                                    KES {{ "{:,.2f}".format(budget.remaining) }}
+
+                                </h6>
+
+                            </div>
+
+                            <div class="col-6">
+
+                                <small class="text-muted">
+
+                                    Used
+
+                                </small>
+
+                                <h6>
+
+                                    {{ "%.0f"|format(budget.actual_progress) }}%
+
+                                </h6>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="budget-view-link mt-3">
+
+                            <small>
+
+                                <i class="fa-solid fa-arrow-right"></i>
+
+                                Click to view transactions
+
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="card budget-empty-card">
+
+        <div class="card-body text-center py-5">
+
+            <i class="fa-solid fa-wallet budget-empty-icon"></i>
+
+            <h3 class="mt-3">
+
+                No Budgets Created
+
+            </h3>
+
+            <p class="text-muted">
+
+                Create your first monthly budget to begin tracking your spending.
+
+            </p>
+
+            <button class="btn budget-add-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
+
+                <i class="fa-solid fa-plus"></i>
+
+                Create Budget
+
+            </button>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+    <!-- ========================== BUDGET TABLE =========================== -->
+
+    <div class="budget-table-card mt-5">
+
+
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle border">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Category</th>
+                        <th>Budget</th>
+                        <th>Spent</th>
+                        <th>Remaining</th>
+                        <th>Status</th>
+                        <th class="text-center">Actions</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for budget in budgets %}
+
+                    <tr>
+
+                        <td>
+
+                            <strong>
+
+                                {{ budget.category }}
+
+                            </strong>
+
+                        </td>
+
+                        <td>
+
+                            KES {{ "{:,.2f}".format(budget.limit) }}
+
+                        </td>
+
+                        <td>
+
+                            KES {{ "{:,.2f}".format(budget.spent) }}
+
+                        </td>
+
+                        <td>
+
+                            KES {{ "{:,.2f}".format(budget.remaining) }}
+
+                        </td>
+
+                        <td>
+
+                            <span class="badge bg-{{ budget.color }}">
+
+                                {{ budget.status }}
+
+                            </span>
+
+                        </td>
+
+                        <td class="text-center">
+
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#editBudget{{ budget.id }}">
+
+                                <i class="fa-solid fa-pen"></i>
+
+                            </button>
+
+                            <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#deleteBudget{{ budget.id }}">
+
+                                <i class="fa-solid fa-trash"></i>
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        
+
+    </div>
+
+    {% for budget in budgets %}
+            <!-- ===================== EDIT MODAL ======================= -->
+
+            <div class="modal fade" id="editBudget{{ budget.id }}" tabindex="-1">
+
+                <div class="modal-dialog">
+
+                    <div class="modal-content">
+
+                        <form action="/update_budget/{{ budget.id }}" method="POST">
+
+                            <div class="modal-header">
+
+                                <h5>
+
+                                    Edit Budget
+
+                                </h5>
+
+                                <button type="button" class="btn-close" data-bs-dismiss="modal">
+
+                                </button>
+
+                            </div>
+
+                            <div class="modal-body">
+
+                                <label class="form-label">
+
+                                    Budget Limit
+
+                                </label>
+
+                                <input type="number" step="0.01" class="form-control" name="limit_amount"
+                                    value="{{ budget.limit }}" required>
+
+                            </div>
+
+                            <div class="modal-footer">
+
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+
+                                    Cancel
+
+                                </button>
+
+                                <button class="btn btn-primary" type="submit">
+
+                                    Save Changes
+
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================== DELETE MODAL ===================== -->
+
+            <div class="modal fade" id="deleteBudget{{ budget.id }}" tabindex="-1">
+
+                <div class="modal-dialog">
+
+                    <div class="modal-content">
+
+                        <form action="/delete_budget/{{ budget.id }}" method="POST">
+
+                            <div class="modal-header">
+
+                                <h5>
+
+                                    Delete Budget
+
+                                </h5>
+
+                                <button type="button" class="btn-close" data-bs-dismiss="modal">
+
+                                </button>
+
+                            </div>
+
+                            <div class="modal-body">
+
+                                <p>
+
+                                    Are you sure you want to delete the
+
+                                    <strong>
+
+                                        {{ budget.category }}
+
+                                    </strong>
+
+                                    budget?
+
+                                </p>
+
+                            </div>
+
+                            <div class="modal-footer">
+
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+
+                                    Cancel
+
+                                </button>
+
+                                <button class="btn btn-danger" type="submit">
+
+                                    Delete
+
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+
+
+    <!-- =========================== BUDGET INSIGHTS ============================ -->
+
+    <div class="card budget-insight-card mt-5 mb-5">
+
+        <div class="card-header budget-table-header">
+
+            <h5 class="mb-0">
+
+                <i class="fa-solid fa-lightbulb me-2"></i>
+
+                Budget Insights
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <div class="budget-tip">
+
+                        <i class="fa-solid fa-chart-pie"></i>
+
+                        <div>
+
+                            <h6>
+
+                                Largest Spending Category
+
+                            </h6>
+
+                            <p>
+
+                                {{ largest_category }}
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <div class="budget-tip">
+
+                        <i class="fa-solid fa-circle-exclamation"></i>
+
+                        <div>
+
+                            <h6>
+
+                                Categories Over Budget
+
+                            </h6>
+
+                            <p>
+
+                                {{ over_budget }}
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 mt-4">
+
+                    <div class="budget-tip">
+
+                        <i class="fa-solid fa-piggy-bank"></i>
+
+                        <div>
+
+                            <h6>
+
+                                Remaining Budget
+
+                            </h6>
+
+                            <p>
+
+                                KES {{ "{:,.2f}".format(total_remaining) }}
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 mt-4">
+
+                    <div class="budget-tip">
+
+                        <i class="fa-solid fa-arrow-pointer"></i>
+
+                        <div>
+
+                            <h6>
+
+                                Quick Tip
+
+                            </h6>
+
+                            <p>
+
+                                Click any budget card to view the
+                                transactions contributing to that budget.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Add Budget Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -49,7 +758,7 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
                                             data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                        <button type="submit" class="btn btn-primary">Add Budget</button>
                                     </div>
 
                                 </form>
@@ -60,6 +769,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
 {% endblock %}
