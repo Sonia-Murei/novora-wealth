@@ -93,24 +93,6 @@
 }
 
 
-/* BUTTONS */
-
-.btn-primary{
-    background:#8e6bbf !important;
-    color:white !important;
-    border:none !important;
-    border-radius:10px !important;
-    padding:10px 20px !important;
-    transition:.3s !important;
-}
-
-.btn-primary:hover{
-    background:#7a58a8 !important;
-    color:white;
-    transform:translateY(-2px) !important;
-}
-
-
 
 /* RESPONSIVE */
 

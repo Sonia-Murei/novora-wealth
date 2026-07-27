@@ -1,0 +1,476 @@
+/* =====================================================
+   Dashboard
+===================================================== */
+
+.dashboard-page{
+    padding-bottom:40px;
+}
+
+
+/* =====================================================
+   Header
+===================================================== */
+
+.dashboard-header{
+    margin-bottom:25px;
+}
+
+.dashboard-header h2{
+    color:#8e6bbf;
+    font-weight:700;
+}
+
+.dashboard-header p{
+    margin-top:5px;
+    color:#6c757d;
+}
+
+
+/* =====================================================
+   Overview Cards
+===================================================== */
+
+.overview-card{
+
+    border:none;
+    border-top:4px solid #8e6bbf;
+    border-radius:14px;
+
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
+
+    transition:.25s ease;
+
+    height:100%;
+}
+
+.overview-card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 10px 22px rgba(142,107,191,.18);
+
+}
+
+.overview-card .card-body{
+
+    text-align:center;
+
+    padding:25px;
+
+}
+
+.overview-icon{
+
+    font-size:2rem;
+
+}
+
+.overview-card h6{
+
+    margin-top:15px;
+
+    color:#555;
+
+    font-weight:600;
+
+}
+
+.overview-card h3,
+.overview-card h5{
+
+    margin:10px 0;
+
+    font-weight:700;
+
+    color:#222;
+
+}
+
+.overview-card small{
+
+    color:#888;
+
+}
+
+
+
+.transactions-card{
+    border-top-color:#5B8DEF;
+}
+
+.transactions-icon{
+    color: #5B8DEF
+}
+
+.budgets-card{
+    border-top-color:#dc35c3;
+}
+
+.budgets-icon{
+    color: #dc35c3;
+}
+
+.goals-card{
+    border-top-color:#43AA8B;
+}
+
+.goals-icon{
+    color: #43AA8B;
+}
+
+.category-card{
+    border-top-color:#F4A261;
+}
+
+.category-icon{
+    color: #F4A261
+}
+
+
+/* =====================================================
+   Main Cards
+===================================================== */
+
+.chart-card,
+.budget-card,
+.goal-card,
+.stats-card,
+.activity-card{
+
+    border:none;
+
+    border-radius:14px;
+
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
+
+    height:100%;
+
+}
+
+.chart-card .card-header,
+.budget-card .card-header,
+.goal-card .card-header,
+.stats-card .card-header,
+.activity-card .card-header{
+
+    background:white;
+
+    border-bottom:2px solid #f2f2f2;
+
+    font-weight:600;
+
+    padding:15px 20px;
+
+}
+
+.chart-card .card-body,
+.budget-card .card-body,
+.goal-card .card-body,
+.stats-card .card-body,
+.activity-card .card-body{
+
+    padding:20px;
+
+}
+
+.card-header-icon{
+    color:#8e6bbf;
+}
+
+
+/* =====================================================
+   Budget Progress
+===================================================== */
+
+.progress{
+
+    height:12px;
+
+    border-radius:20px;
+
+    background:#ececec;
+
+}
+
+.progress-bar{
+
+    background:#ff85a2;
+;
+
+    border-radius:20px;
+
+    transition:width .8s ease;
+
+}
+
+.budget-tip{
+
+    background:#faf9fd;
+    border-left:4px solid #f0ad4e;
+
+    border-radius:12px;
+
+    padding:1rem;
+
+}
+
+.budget-tip h6{
+
+    font-weight:600;
+    color:#444;
+
+}
+
+.budget-tip p{
+
+    font-size:.9rem;
+    line-height:1.5;
+
+}
+
+
+/* =====================================================
+   Goal Summary
+===================================================== */
+
+/* ---------- Overall Progress ---------- */
+
+.goal-progress-circle{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    margin:auto;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:conic-gradient(#8e6bbf 0deg 245deg,#ece8f6 245deg);
+    border:8px solid #f8f6fc;
+
+    box-shadow:0 8px 18px rgba(0,0,0,.08);
+}
+
+.goal-progress-circle span{
+    font-size:1.6rem;
+    font-weight:700;
+    color:#5f4b8b;
+}
+
+/* ---------- Statistic Cards ---------- */
+
+.goal-stat-card{
+
+    padding:1rem .5rem;
+    border-radius:14px;
+    transition:all .25s ease;
+
+    border:1px solid #ececec;
+}
+
+.goal-stat-card:hover{
+
+    transform:translateY(-4px);
+    box-shadow:0 10px 20px rgba(0,0,0,.08);
+
+}
+
+.goal-stat-card i{
+
+    font-size:1.4rem;
+    margin-bottom:.4rem;
+
+}
+
+.goal-stat-card h4{
+
+    font-weight:700;
+    margin-bottom:.2rem;
+
+}
+
+/* Completed */
+
+.goal-stat-card.completed{
+
+    background:#eef9f5;
+
+}
+
+.goal-stat-card.completed i,
+.goal-stat-card.completed h4{
+
+    color:#43AA8B;
+
+}
+
+/* Active */
+
+.goal-stat-card.active{
+
+    background:#eef5ff;
+
+}
+
+.goal-stat-card.active i,
+.goal-stat-card.active h4{
+
+    color:#5B8DEF;
+
+}
+
+/* Overdue */
+
+.goal-stat-card.overdue{
+
+    background:#fff2f2;
+
+}
+
+.goal-stat-card.overdue i,
+.goal-stat-card.overdue h4{
+
+    color:#dc3545;
+
+}
+
+/* Labels */
+
+.goal-stat-card small{
+
+    color:#6c757d;
+    font-size:.8rem;
+
+}
+
+/* ---------- Next Goal ---------- */
+
+.next-goal-section{
+
+    background:#faf9fd;
+    border-left:4px solid #8e6bbf;
+
+    border-radius:12px;
+
+    padding:1rem;
+
+}
+
+.next-goal-section h6{
+
+    margin-bottom:.35rem;
+    font-weight:600;
+
+}
+
+.next-goal-section i{
+
+    color:#8e6bbf;
+
+}
+
+
+
+/* =====================================================
+   Recent Transactions
+===================================================== */
+
+.activity-card table{
+
+    margin-bottom:0;
+
+}
+
+.activity-card thead{
+
+    background:#faf8fa;
+
+}
+
+.activity-card th{
+
+    color:#666;
+
+    font-weight:600;
+
+}
+
+.activity-card td{
+
+    vertical-align:middle;
+
+}
+
+.activity-card thead th{
+    background:#8e6bbf;
+    color:white;
+    border:none;
+}
+
+.activity-card .table-striped > tbody > tr:nth-of-type(odd) > * {
+    background-color: #faf5fc;
+}
+
+.activity-card .table-striped > tbody > tr:nth-of-type(even) > * {
+    background-color: #ece2f8;
+}
+
+.activity-card tbody tr{
+    transition: background-color .25s ease;
+}
+
+.activity-card tbody tr:hover > *{
+    background-color:#d9c8f0 !important;
+}
+
+
+
+/* =====================================================
+   Charts
+===================================================== */
+
+canvas{
+
+    width:100% !important;
+
+    max-height:360px;
+
+}
+
+
+
+/* =====================================================
+   Responsive
+===================================================== */
+
+@media (max-width:992px){
+
+    .dashboard-header{
+
+        text-align:center;
+
+    }
+
+}
+
+@media (max-width:768px){
+
+    .overview-card{
+
+        margin-bottom:5px;
+
+    }
+
+    .overview-icon{
+
+        font-size:1.7rem;
+
+    }
+
+    .overview-card h3{
+
+        font-size:1.5rem;
+
+    }
+
+}

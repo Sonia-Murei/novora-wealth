@@ -1,16 +1,585 @@
 {% extends 'base.html' %}
 
 {% block styles %}
-<link rel="stylesheet"
-      href="{{ url_for('static', filename='css/dashboard.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 {% endblock %}
 
 
 {% block title %} Dashboard {% endblock %}
-{% block content %} 
+{% block content %}
 
 <div>
-    
+
+    <div class="container-fluid dashboard-page py-4">
+
+        <!-- Dashboard Header -->
+
+        <div class="dashboard-header mb-4">
+
+            <h2 class="fw-bold">
+                <i class="fa-solid fa-chart-line me-2"></i>
+                Financial Reports
+            </h2>
+
+            <p class="text-muted">
+                Financial summary for {{ current_month }}
+            </p>
+
+        </div>
+
+
+        <!-- Overview Cards -->
+
+        <div class="row g-4 mb-4">
+
+            <!-- Transactions -->
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="card overview-card transactions-card">
+
+                    <div class="card-body text-center">
+
+                        <i class="fa-solid fa-receipt overview-icon transactions-icon"></i>
+
+                        <h6 class="mt-3">Monthly Transactions</h6>
+
+                        <h3>{{ transaction_count }}</h3>
+
+                        <small class="text-muted">
+                            Recorded this month
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Budget Usage -->
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="card overview-card budgets-card">
+
+                    <div class="card-body text-center">
+
+                        <i class="fa-solid fa-chart-pie overview-icon budgets-icon"></i>
+
+                        <h6 class="mt-3">Budget Usage</h6>
+
+                        <h3>{{ budget_usage }}%</h3>
+
+                        <small class="text-muted">
+
+                            {{ budgets_on_track }} of {{ total_budgets }} budgets on track
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Goals -->
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="card overview-card goals-card">
+
+                    <div class="card-body text-center">
+
+                        <i class="fa-solid fa-bullseye overview-icon goals-icon"></i>
+
+                        <h6 class="mt-3">Completed Goals</h6>
+
+                        <h3>{{ completed_goals }}</h3>
+
+                        <small class="text-muted">
+
+                            Goals achieved
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Highest Category -->
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="card overview-card category-card">
+
+                    <div class="card-body text-center">
+
+                        <i class="fa-solid fa-trophy overview-icon category-icon"></i>
+
+                        <h6 class="mt-3">Highest Spending Category</h6>
+
+                        <h5>{{ highest_category }}</h5>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Charts -->
+
+        <div class="row g-4 mb-4">
+
+            <!-- Income vs Expenses -->
+
+            <div class="col-lg-6">
+
+                <div class="card chart-card h-100">
+
+                    <div class="card-header">
+
+                        <i class="fa-solid fa-chart-column me-2 card-header-icon"></i>
+
+                        Income vs Expenses
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <canvas id="bar-chart-income"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Spending by Category -->
+
+            <div class="col-lg-6">
+
+                <div class="card chart-card h-100">
+
+                    <div class="card-header">
+
+                        <i class="fa-solid fa-chart-pie me-2 card-header-icon"></i>
+
+                        Spending by Category
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <canvas id="bar-chart-category" class="category-progress"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+        <!-- Budget & Goals -->
+
+        <div class="row g-4 mb-4">
+
+            <!-- Budget Performance -->
+
+            <div class="col-lg-7">
+
+                <div class="card budget-card h-100">
+
+                    <div class="card-header">
+
+                        <i class="fa-solid fa-wallet me-2 card-header-icon"></i>
+
+                        Budget Performance
+
+                    </div>
+
+                    <div class="card-body">
+
+                        {% for budget in budgets %}
+
+                        <div class="mb-4">
+
+                            <div class="d-flex justify-content-between">
+
+                                <strong>
+
+                                    {{ budget.category }}
+
+                                </strong>
+
+                                <span>
+
+                                    KES {{ "{:,.2f}".format(budget.spent) }}
+
+                                    /
+
+                                    KES {{ "{:,.2f}".format(budget.limit) }}
+
+                                </span>
+
+                            </div>
+
+                            <div class="progress mt-2">
+
+                                <div class="progress-bar" role="progressbar" style="width: {{ budget.percentage }}%;"
+                                    aria-valuenow="{{ budget.percentage }}" aria-valuemin="0" aria-valuemax="100">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+
+                        <div class="budget-tip mt-5">
+                            <h6 class="mb-2">
+                                <i class="fa-solid fa-lightbulb me-2 text-warning"></i>
+                                Budget Tip
+                            </h6>
+
+                            <p class="mb-0 text-muted">
+                                Keeping your spending below <strong>80%</strong> before month-end leaves room for
+                                unexpected expenses.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Goal Summary -->
+            <div class="col-lg-5">
+                <div class="card goal-card h-100">
+
+                    <div class="card-header">
+                        <i class="fa-solid fa-bullseye me-2 card-header-icon"></i>
+                        Goal Summary
+                    </div>
+
+                    <div class="card-body">
+
+                        <!-- Overall Goal Progress -->
+                        <div class="text-center mb-4">
+                            <div class="goal-progress-circle mx-auto">
+                                <span>{{ completion_percentage }}%</span>
+                            </div>
+
+                            <h5 class="mt-3 mb-1">Overall Progress</h5>
+                            <small class="text-muted">
+                                {{ completed_goals }} of {{ total_goals }} goals completed
+                            </small>
+                        </div>
+
+                        <!-- Goal Statistics -->
+                        <div class="row text-center g-3">
+
+                            <div class="col-4">
+                                <div class="goal-stat-card completed">
+                                    <i class="fa-solid fa-circle-check mb-2"></i>
+                                    <h4>{{ completed_goals }}</h4>
+                                    <small>Completed</small>
+                                </div>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="goal-stat-card active">
+                                    <i class="fa-solid fa-hourglass-half mb-2"></i>
+                                    <h4>{{ active_goals }}</h4>
+                                    <small>Active</small>
+                                </div>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="goal-stat-card overdue">
+                                    <i class="fa-solid fa-triangle-exclamation mb-2"></i>
+                                    <h4>{{ overdue_goals }}</h4>
+                                    <small>Overdue</small>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Divider -->
+                        <hr class="my-4">
+
+                        <!-- Next Goal -->
+                        <div class="next-goal-section">
+
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fa-solid fa-calendar-days me-2"></i>
+                                <strong>Next Goal Deadline</strong>
+                            </div>
+
+                            {% if next_goal %}
+                            <h6 class="fw-semibold mb-1">{{ next_goal[1] }}</h6>
+
+                            <div class="text-muted small">
+                                <i class="fa-regular fa-clock me-1"></i>
+                                Due on {{ next_goal[4].strftime('%d %b %Y') }}
+                            </div>
+                            {% else %}
+                            <small class="text-muted">
+                                No active goals available.
+                            </small>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+            <!-- Recent Transactions -->
+
+            <div class="">
+
+                <div class="card activity-card h-100">
+
+                    <div class="card-header">
+
+                        <i class="fa-solid fa-clock-rotate-left me-2 card-header-icon"></i>
+
+                        Recent Transactions
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="table-responsive">
+
+                            <table class="table table-hover table-striped align-middle">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>Date</th>
+                                        <th>Category</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    {% for transaction in recent_transactions %}
+
+                                    <tr>
+
+                                        <td>
+
+                                            {{ transaction[5].strftime("%d %b %Y") }}
+
+                                        </td>
+
+                                        <td>
+
+                                            {{ transaction[6] }}
+
+                                        </td>
+
+                                        <td>
+
+                                            {% if transaction[2] == "income" %}
+
+                                            <span class="badge bg-success">
+
+                                                Income
+
+                                            </span>
+
+                                            {% else %}
+
+                                            <span class="badge bg-danger">
+
+                                                Expense
+
+                                            </span>
+
+                                            {% endif %}
+
+                                        </td>
+
+                                        <td>
+
+                                            {% if transaction[2] == "income" %}
+
+                                            <span class="text-success fw-semibold">
+
+                                                KES {{ "{:,.2f}".format(transaction[3]) }}
+
+                                            </span>
+
+                                            {% else %}
+
+                                            <span class="text-danger fw-semibold">
+
+                                                KES {{ "{:,.2f}".format(transaction[3]) }}
+
+                                            </span>
+
+                                            {% endif %}
+
+                                        </td>
+
+                                    </tr>
+
+                                    {% endfor %}
+
+                                </tbody>
+
+                            </table>
+
+                            <div class="card-footer bg-white border-0 text-end">
+                                <a href="/transactions" class="text-decoration-none">
+                                    View All Transactions
+                                    <i class="fa-solid fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <script>
+
+        new Chart(document.getElementById("bar-chart-income"), {
+
+            type: 'doughnut',
+
+            data: {
+
+                labels: ["Income", "Expenses"],
+
+                datasets: [{
+
+                    data: [
+                        {{ monthly_income_chart[0] }},
+                {{ monthly_expense_chart[0] }}
+            ],
+
+            backgroundColor: [
+                "#5B8DEF",
+                "#dc3545"
+            ],
+
+            borderColor: "#ffffff",
+
+            borderWidth: 2
+
+        }]
+
+    },
+
+            options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+
+                    position: "bottom"
+
+                }
+
+            }
+
+        }
+
+});
+
+
+
+        new Chart(document.getElementById("bar-chart-category"), {
+
+            type: 'bar',
+
+            data: {
+
+                labels: {{ categories | safe }},
+
+            datasets: [
+
+            {
+
+                label: "Amount Spent",
+
+                backgroundColor: "#ffa82e",
+
+                data: {{ category_totals | safe }}
+
+        }
+
+        ]
+
+    },
+
+            options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                title: {
+
+                    display: false
+
+                }
+
+            }
+
+        }
+
+});
+
+    </script>
+
 </div>
 
 {% endblock %}

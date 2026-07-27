@@ -108,16 +108,175 @@ def login():
 @login_required
 def dashboard():
 
-    print(session)
-
-    # user_id = session["user_id"] -> Keeps track of which user is currently logged in
     user_id = session["user_id"]
+
+    # -------------------------------
+    # Get Data
+    # -------------------------------
 
     budgets = get_all_budget_usage(user_id)
     goals = get_user_goals(user_id)
     transactions = transactions_per_user(user_id)
 
-    return render_template("dashboard.html", budgets=budgets, goals=goals, transactions=transactions)
+    statistics = get_transaction_statistics(user_id)
+    summary = get_transaction_summary(user_id)
+    monthly_summary = get_monthly_category_summary(user_id)
+
+    # -------------------------------
+    # Overview Cards
+    # -------------------------------
+
+    transaction_count = len(transactions)
+
+    highest_category = statistics["highest_category"]
+
+    # -------------------------------
+    # Budget Summary
+    # -------------------------------
+
+    budget_list = []
+
+    total_limit = 0
+    total_spent = 0
+    budgets_on_track = 0
+
+    for budget in budgets:
+
+        limit_amount = float(budget[4])
+        spent = float(budget[5])
+        remaining = float(budget[6])
+
+        if limit_amount > 0:
+            percentage = round((spent / limit_amount) * 100)
+        else:
+            percentage = 0
+
+        if spent <= limit_amount:
+            budgets_on_track += 1
+
+        total_limit += limit_amount
+        total_spent += spent
+
+        budget_list.append({
+            "category": budget[2],
+            "limit": limit_amount,
+            "spent": spent,
+            "remaining": remaining,
+            "percentage": percentage
+        })
+
+    total_budgets = len(budget_list)
+
+    if total_limit > 0:
+        budget_usage = round((total_spent / total_limit) * 100)
+    else:
+        budget_usage = 0
+
+    # -------------------------------
+    # Goal Summary
+    # -------------------------------
+    completed_goals = 0
+    active_goals = 0
+    overdue_goals = 0
+
+    today = date.today()
+
+    next_goal = None
+
+    for goal in goals:
+
+        target = float(goal[2])
+        saved = float(goal[3])
+        deadline = goal[4]
+
+        if saved >= target:
+
+            completed_goals += 1
+
+        elif deadline < today:
+
+            overdue_goals += 1
+
+        else:
+
+            active_goals += 1
+
+            # Find the closest upcoming active goal
+            if next_goal is None:
+                next_goal = goal
+
+    total_goals = len(goals)
+
+    completion_percentage = (
+        round((completed_goals / total_goals) * 100)
+        if total_goals > 0 else 0
+    )
+
+    # -------------------------------
+    # Income vs Expenses Chart
+    # -------------------------------
+
+    chart_months = [datetime.now().strftime("%B")]
+
+    monthly_income_chart = [float(summary["income"])]
+    monthly_expense_chart = [float(summary["expenses"])]
+
+    # -------------------------------
+    # Spending by Category Chart
+    # -------------------------------
+
+    categories = []
+    category_totals = []
+
+    for row in monthly_summary:
+
+        categories.append(row[0])
+        category_totals.append(float(row[1]))
+
+    # -------------------------------
+    # Recent Transactions
+    # -------------------------------
+
+    recent_transactions = transactions[:5]
+    
+
+    # -------------------------------
+    # Render Template
+    # -------------------------------
+
+    return render_template(
+
+        "dashboard.html",
+
+        current_month=datetime.now().strftime("%B %Y"),
+
+        transaction_count=transaction_count,
+
+        budget_usage=budget_usage,
+        budgets_on_track=budgets_on_track,
+        total_budgets=total_budgets,
+
+        completed_goals=completed_goals,
+        active_goals=active_goals,
+        overdue_goals=overdue_goals,
+        total_goals=total_goals,
+        completion_percentage=completion_percentage,
+        next_goal=next_goal,
+
+        highest_category=highest_category,
+
+        budgets=budget_list,
+
+        recent_transactions=recent_transactions,
+
+        chart_months=chart_months,
+        monthly_income_chart=monthly_income_chart,
+        monthly_expense_chart=monthly_expense_chart,
+
+        categories=categories,
+        category_totals=category_totals
+
+    )
 
 
 @app.route('/transactions')
