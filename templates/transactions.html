@@ -90,13 +90,13 @@
             <!-- Income -->
             <div class="col-lg-3 col-md-6">
 
-                <div class="summary-card income-card">
+                <div class="transaction-summary-card income-card">
 
-                    <div class="summary-icon">
+                    <div class="transaction-summary-icon">
                         <i class="fa-solid fa-arrow-trend-up"></i>
                     </div>
 
-                    <div class="summary-details">
+                    <div class="transaction-summary-details">
                         <p>Total Income</p>
                         <h3>
                             KES {{ "{:,.2f}".format(monthly_income) }}
@@ -110,13 +110,13 @@
             <!-- Expenses -->
             <div class="col-lg-3 col-md-6">
 
-                <div class="summary-card expense-card ">
+                <div class="transaction-summary-card expense-card ">
 
-                    <div class="summary-icon">
+                    <div class="transaction-summary-icon">
                         <i class="fa-solid fa-arrow-trend-down"></i>
                     </div>
 
-                    <div class="summary-details">
+                    <div class="transaction-summary-details">
                         <p>Total Expenses</p>
                         <h3>
                             KES {{ "{:,.2f}".format(monthly_expenses) }}
@@ -130,13 +130,13 @@
             <!-- Savings -->
             <div class="col-lg-3 col-md-6">
 
-                <div class="summary-card savings-card">
+                <div class="transaction-summary-card savings-card">
 
-                    <div class="summary-icon">
+                    <div class="transaction-summary-icon">
                         <i class="fa-solid fa-piggy-bank"></i>
                     </div>
 
-                    <div class="summary-details">
+                    <div class="transaction-summary-details">
                         <p>Net Savings</p>
                         <h3>
                             KES {{ "{:,.2f}".format(net_savings) }}
@@ -150,13 +150,13 @@
             <!-- Transactions -->
             <div class="col-lg-3 col-md-6">
 
-                <div class="summary-card transaction-card">
+                <div class="transaction-summary-card transaction-card">
 
-                    <div class="summary-icon">
+                    <div class="transaction-summary-icon">
                         <i class="fa-solid fa-receipt"></i>
                     </div>
 
-                    <div class="summary-details mb-4">
+                    <div class="transaction-summary-details mb-4">
                         <p>Transactions</p>
                         <h3>{{ transaction_count }}</h3>
                     </div>
@@ -545,7 +545,7 @@
 
 
 
-    <div class="statistics-card mt-4 mb-5">
+    <div class="transaction-statistics-card mt-4 mb-5">
 
         <div>
             <h3>
@@ -558,52 +558,52 @@
 
         </div>
 
-        <div class="stat-item">
+        <div class="transaction-stat-item">
 
-            <div class="stat-icon purple">
+            <div class="transaction-stat-icon purple">
                 <i class="fa-solid fa-wallet"></i>
             </div>
 
-            <div class="stat-info">
+            <div class="transaction-stat-info">
                 <h6>Highest Spending Category</h6>
                 <p>{{ highest_category }}</p>
             </div>
 
         </div>
 
-        <div class="stat-item">
+        <div class="transaction-stat-item">
 
-            <div class="stat-icon green">
+            <div class="transaction-stat-icon green">
                 <i class="fa-solid fa-money-bill-trend-up"></i>
             </div>
 
-            <div class="stat-info">
+            <div class="transaction-stat-info">
                 <h6>Highest Income Category</h6>
                 <p>{{ highest_income_category }}</p>
             </div>
 
         </div>
 
-        <div class="stat-item">
+        <div class="transaction-stat-item">
 
-            <div class="stat-icon orange">
+            <div class="transaction-stat-icon orange">
                 <i class="fa-solid fa-arrow-up-wide-short"></i>
             </div>
 
-            <div class="stat-info">
+            <div class="transaction-stat-info">
                 <h6>Largest Transaction</h6>
                 <p>KSh {{ "{:,.2f}".format(largest_transaction) }}</p>
             </div>
 
         </div>
 
-        <div class="stat-item">
+        <div class="transaction-stat-item">
 
-            <div class="stat-icon blue">
+            <div class="transaction-stat-icon blue">
                 <i class="fa-solid fa-list"></i>
             </div>
 
-            <div class="stat-info">
+            <div class="transaction-stat-info">
                 <h6>Most Used Category</h6>
                 <p>{{ most_used_category }}</p>
             </div>

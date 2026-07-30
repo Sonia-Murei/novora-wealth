@@ -174,7 +174,7 @@
    SUMMARY CARDS
 =================================== */
 
-.summary-card{
+.transaction-summary-card{
 
     background:#ffffff;
     border-radius:18px;
@@ -188,7 +188,7 @@
     border-left:6px solid #7A58A8;
 }
 
-.summary-card:hover{
+.transaction-summary-card:hover{
 
     transform:translateY(-6px);
 
@@ -196,7 +196,7 @@
 
 }
 
-.summary-icon{
+.transaction-summary-icon{
 
     width:65px;
     height:65px;
@@ -208,13 +208,13 @@
     color:white;
 }
 
-.summary-details{
+.transaction-summary-details{
 
     flex:1;
 
 }
 
-.summary-details p{
+.transaction-summary-details p{
 
     margin-bottom:6px;
     color:#777;
@@ -222,7 +222,7 @@
 
 }
 
-.summary-details h3{
+.transaction-summary-details h3{
 
     margin:0;
     font-weight:700;
@@ -233,25 +233,25 @@
 
 /* Individual colours */
 
-.income-card .summary-icon{
+.income-card .transaction-summary-icon{
 
     background:#28a745;
 
 }
 
-.expense-card .summary-icon{
+.expense-card .transaction-summary-icon{
 
     background:#dc3545;
 
 }
 
-.savings-card .summary-icon{
+.savings-card .transaction-summary-icon{
 
     background:#FF9800;
 
 }
 
-.transaction-card .summary-icon{
+.transaction-card .transaction-summary-icon{
 
     background:#17a2b8;
 
@@ -339,7 +339,7 @@
     background:#684694;
 }
 
-.statistics-card{
+.transaction-statistics-card{
 
     background:#fff;
     border-radius:18px;
@@ -349,7 +349,7 @@
 
 }
 
-.statistics-card h3{
+.transaction-statistics-card h3{
 
     color:#7A58A8;
     margin-bottom:25px;
@@ -357,7 +357,7 @@
 
 }
 
-.stat-item{
+.transaction-stat-item{
 
     display:flex;
     align-items:center;
@@ -366,13 +366,13 @@
 
 }
 
-.stat-item:last-child{
+.transaction-stat-item:last-child{
 
     margin-bottom:0;
 
 }
 
-.stat-icon{
+.transaction-stat-icon{
 
     width:55px;
     height:55px;
@@ -388,20 +388,20 @@
 
 }
 
-.stat-info{
+.transaction-stat-info{
 
     flex:1;
 
 }
 
-.stat-info h6{
+.transaction-stat-info h6{
 
     margin-bottom:4px;
     color:#666;
 
 }
 
-.stat-info p{
+.transaction-stat-info p{
 
     margin:0;
     font-size:1.05rem;

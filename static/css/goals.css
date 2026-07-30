@@ -17,7 +17,7 @@
 
 /* SUMMARY CARDS */
 
-.summary-card{
+.goals-summary-card{
     background:#fff;
     border-radius:18px;
     padding:25px;
@@ -30,24 +30,24 @@
 
 }
 
-.summary-card:hover{
+.goals-summary-card:hover{
     transform:translateY(-6px);
     box-shadow:0 12px 28px rgba(0,0,0,.12);
 }
 
-.summary-card h6{
+.goals-summary-card h6{
     color:#777;
     margin-bottom:5px;
 }
 
-.summary-card h3{
+.goals-summary-card h3{
     color:#4b3d63;
     font-weight:700;
 }
 
 /* ICON CIRCLE */
 
-.icon-circle{
+.goals-icon-circle{
     width:60px;
     height:60px;
     border-radius:50%;
@@ -57,14 +57,14 @@
     align-items:center;
 }
 
-.icon-circle i{
+.goals-icon-circle i{
     color:white;
     font-size:1.4rem;
 }
 
 /* FILTER CARD */
 
-.filter-card{
+.goals-filter-card{
     border:none;
     border-radius:18px;
     box-shadow:0 8px 20px rgba(0,0,0,.06);
@@ -89,7 +89,7 @@
 
 /* FILTER BUTTONS */
 
-.btn-filter{
+.goals-filter-btn{
     border:1px solid #d9c8f3;
     color:#8e6bbf;
     background:white;
@@ -99,12 +99,12 @@
     transition:.3s;
 }
 
-.btn-filter:hover{
+.goals-filter-btn:hover{
     background:#8e6bbf;
     color:white;
 }
 
-.btn-filter.active{
+.goals-filter-btn.active{
     background:#8e6bbf;
     color:white;
 }
@@ -180,12 +180,12 @@
 
 /*DEADLINE */
 
-.deadline{
+.goal-deadline{
     color:#666;
     font-size:.95rem;
 }
 
-.deadline strong{
+.goal-deadline strong{
     color:#4b3d63;
 }
 
@@ -239,7 +239,7 @@
 
 }
 
-.idea-item{
+.goal-idea-item{
 
     text-align:center;
     padding:25px;
@@ -250,14 +250,14 @@
 
 }
 
-.idea-item:hover{
+.goal-idea-item:hover{
 
     transform:translateY(-6px);
     box-shadow:0 10px 25px rgba(122,88,168,.15);
 
 }
 
-.idea-item i{
+.goal-idea-item i{
 
     width:65px;
     height:65px;
@@ -274,14 +274,14 @@
 
 }
 
-.idea-item h5{
+.goal-idea-item h5{
 
     font-weight:700;
     margin-bottom:10px;
 
 }
 
-.idea-item p{
+.goal-idea-item p{
 
     color:#666;
     font-size:.92rem;
@@ -350,7 +350,7 @@
     .goal-info{
         grid-template-columns:1fr;
     }
-    .summary-card{
+    .goals-summary-card{
         justify-content:center;
         text-align:center;
         flex-direction:column;
@@ -361,21 +361,21 @@
     .page-title{
         font-size:1.8rem;
     }
-    .btn-filter{
+    .goals-filter-btn{
         margin-top:8px;
     }
     .goal-card{
         padding:22px;
     }
 }
-.summary-card{
+.goals-summary-card{
     min-height:140px;
     display:flex;
     flex-direction:column;
     justify-content:center;
 }
 
-.summary-card h3{
+.goals-summary-card h3{
     font-size:1.6rem;
     white-space:nowrap;
 }
