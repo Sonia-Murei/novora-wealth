@@ -699,16 +699,6 @@ def update_goal_progress():
     return redirect(url_for("goals"))
 
 
-@app.route("/reports")
-def reports():
-
-    user_id = session["user_id"]
-
-    all_budget_data = get_all_budget_usage(user_id)
-
-    return render_template("reports.html", all_budget_data=all_budget_data
-                           )
-
 
 @app.route('/logout')
 def logout():
@@ -717,4 +707,5 @@ def logout():
     return redirect(url_for('login'))
 
 
-app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)

@@ -1,9 +1,18 @@
+import os
+from dotenv import load_dotenv
 import psycopg2
 
-conn = psycopg2.connect(host='localhost',port=5432,user='postgres',password='murei@123',dbname='novora')
+load_dotenv()
+
+conn = psycopg2.connect(
+    host=os.getenv("DB_HOST"),
+    port=os.getenv("DB_PORT"),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+    dbname=os.getenv("DB_NAME")
+)
 
 cur = conn.cursor()
-from datetime import date
 
 # Inserts transactions from goal edits
 def insert_goal_transaction(user_id, category_id, amount, description):
