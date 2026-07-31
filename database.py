@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 import psycopg2
+from datetime import date
 
 load_dotenv()
 
@@ -9,10 +10,14 @@ conn = psycopg2.connect(
     port=os.getenv("DB_PORT"),
     user=os.getenv("DB_USER"),
     password=os.getenv("DB_PASSWORD"),
-    dbname=os.getenv("DB_NAME")
+    dbname=os.getenv("DB_NAME"),
+    sslmode="require"
 )
 
 cur = conn.cursor()
+
+# sslmode="require" -> tells PostgreSQL to use a secure connection, which Neon requires.
+
 
 # Inserts transactions from goal edits
 def insert_goal_transaction(user_id, category_id, amount, description):
