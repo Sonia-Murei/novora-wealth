@@ -5,22 +5,23 @@ from datetime import date
 
 load_dotenv()
 
-conn = psycopg2.connect(
-    host=os.getenv("DB_HOST"),
-    port=os.getenv("DB_PORT"),
-    user=os.getenv("DB_USER"),
-    password=os.getenv("DB_PASSWORD"),
-    dbname=os.getenv("DB_NAME"),
-    sslmode="require"
-)
-
-cur = conn.cursor()
+def get_connection():
+    return psycopg2.connect(
+        host=os.getenv("DB_HOST"),
+        port=os.getenv("DB_PORT"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        dbname=os.getenv("DB_NAME"),
+        sslmode="require"
+    )
 
 # sslmode="require" -> tells PostgreSQL to use a secure connection, which Neon requires.
 
 
 # Inserts transactions from goal edits
 def insert_goal_transaction(user_id, category_id, amount, description):
+    conn = get_connection()
+    cur = conn.cursor()
 
     cur.execute("""
         INSERT INTO transactions
@@ -35,14 +36,28 @@ def insert_goal_transaction(user_id, category_id, amount, description):
     ))
 
     conn.commit()
+
+    cur.close()
+    conn.close()
+
 # Transactions Queries:
 
 def get_transactions():
+    conn = get_connection()
+    cur = conn.cursor()
+
     cur.execute("select * from transactions ORDER BY transaction_date DESC;")
     transactions = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
     return transactions
 
 def insert_transaction(user_id, category_id, transaction_type, amount, description, transaction_date):
+    conn = get_connection()
+    cur = conn.cursor()
+
     cur.execute("""INSERT INTO transactions
         (user_id, category_id, type, amount, description, transaction_date)
         VALUES (%s, %s, %s, %s, %s, %s)
@@ -57,7 +72,13 @@ def insert_transaction(user_id, category_id, transaction_type, amount, descripti
 
     conn.commit()
 
+    cur.close()
+    conn.close()
+
 def transactions_per_user(user_id):
+    conn = get_connection()
+    cur = conn.cursor()
+
     cur.execute("""SELECT 
                 t.id,t.category_id, t.type, t.amount,
                 t.description, t.transaction_date, c.category_name
@@ -66,9 +87,15 @@ def transactions_per_user(user_id):
                 WHERE t.user_id = %s ORDER BY t.transaction_date DESC
             """, (user_id,))
     user_transactions = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
     return user_transactions
 
 def get_transactions_by_category(user_id, category_id):
+    conn = get_connection()
+    cur = conn.cursor()
 
     cur.execute("""SELECT t.id, c.category_name, t.type,
             t.amount, t.description, t.transaction_date
@@ -76,7 +103,12 @@ def get_transactions_by_category(user_id, category_id):
             WHERE t.user_id = %s AND t.category_id = %s
             ORDER BY t.transaction_date DESC""", (user_id, category_id))
 
-    return cur.fetchall()
+    result= cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return result
 
     # NB: (user_id) is a tuple.
 
@@ -85,6 +117,9 @@ def get_transactions_by_category(user_id, category_id):
     # so that each user only sees their own transactions.
 
 def get_transaction_summary(user_id):
+    conn = get_connection()
+    cur = conn.cursor()
+
     cur.execute("""
         SELECT
             COALESCE(SUM(CASE WHEN type = 'income' THEN amount END), 0) AS total_income,
@@ -101,6 +136,9 @@ def get_transaction_summary(user_id):
     transaction_count = result[2]
     net_savings = total_income - total_expenses
 
+    cur.close()
+    conn.close()
+
     return {
         "income": total_income,
         "expenses": total_expenses,
@@ -112,6 +150,9 @@ def get_transaction_summary(user_id):
 
 def update_transaction_db(transaction_id, user_id, category_id, transaction_type,
                           amount, description, transaction_date):
+    conn = get_connection()
+    cur = conn.cursor()
+
     cur.execute(""" UPDATE transactions
         SET category_id = %s, type = %s, amount = %s, description = %s, transaction_date = %s
         WHERE id = %s AND user_id = %s;
@@ -120,12 +161,24 @@ def update_transaction_db(transaction_id, user_id, category_id, transaction_type
 
     conn.commit()
 
+    cur.close()
+    conn.close()
+
 def delete_transaction(transaction_id,user_id):
+    conn = get_connection()
+    cur = conn.cursor()
+
     cur.execute("DELETE FROM transactions WHERE id=%s AND user_id=%s;",(transaction_id,user_id))
     conn.commit()
 
+    cur.close()
+    conn.close()
+
 
 def get_transaction_statistics(user_id):
+    conn = get_connection()
+    cur = conn.cursor()
+
     stats = {}
 
     # Highest spending category (expenses only)
@@ -166,16 +219,29 @@ def get_transaction_statistics(user_id):
     result = cur.fetchone()
     stats["most_used_category"] = result[0] if result else "N/A"
 
+    cur.close()
+    conn.close()
+
     return stats
 
 # Budgets Queries:
 
 def get_budgets():
+    conn = get_connection()
+    cur = conn.cursor()
+
     cur.execute("select * from budgets ORDER BY month DESC;")
     budgets = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
     return budgets
 
 def insert_budgets(user_id, category_id, limit_amount, month):
+    conn = get_connection()
+    cur = conn.cursor()
+
     try:
         cur.execute("""INSERT INTO budgets
             (user_id,category_id,limit_amount,month) 
@@ -194,7 +260,15 @@ def insert_budgets(user_id, category_id, limit_amount, month):
         print(e)
         raise
 
+    finally:
+
+        cur.close()
+        conn.close()
+
 def budgets_per_user(user_id):
+    conn = get_connection()
+    cur = conn.cursor()
+
     cur.execute("""
         SELECT
         b.id, c.category_name, b.limit_amount, b.month, b.created_at
@@ -203,10 +277,17 @@ def budgets_per_user(user_id):
     """, (user_id,))
 
     user_budget = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
     return user_budget
 
 
 def get_budget_by_category(user_id, category_id, month):
+    conn = get_connection()
+    cur = conn.cursor()
+
     cur.execute("""
         SELECT id, limit_amount, month
         FROM budgets WHERE user_id = %s
@@ -214,6 +295,10 @@ def get_budget_by_category(user_id, category_id, month):
     """, (user_id, category_id, month))
 
     category_budget = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
     return category_budget
 
 # returns the budget that a user has set for a specific category in a specific month.(hence .fetchone())
@@ -226,6 +311,9 @@ def get_budget_by_category(user_id, category_id, month):
 # **********************************************************************************************
 
 def get_one_budget_usage(user_id, category_id, month):
+    conn = get_connection()
+    cur = conn.cursor()
+
     cur.execute("""
         SELECT b.limit_amount, COALESCE(SUM(t.amount), 0) AS spent
         FROM budgets b LEFT JOIN transactions t
@@ -253,13 +341,18 @@ def get_one_budget_usage(user_id, category_id, month):
         else:
             status = "Over Budget"
 
-        return {
+        output = {
             "budget": limit_amount,
             "spent": spent,
             "remaining": remaining,
             "progress": progress,
             "status": status
         }
+
+        return output
+
+    cur.close()
+    conn.close()
 
     return None #Returns when a user never created a budget for a specified category
 
@@ -293,6 +386,9 @@ def get_one_budget_usage(user_id, category_id, month):
 # or:
 
 def get_all_budget_usage(user_id):
+    conn = get_connection()
+    cur = conn.cursor()
+
     cur.execute("""
         SELECT
         b.id, b.category_id, c.category_name,b.month, b.limit_amount,
@@ -310,7 +406,12 @@ def get_all_budget_usage(user_id):
         ORDER BY c.category_name
     """, (user_id,))
 
-    return cur.fetchall()
+    result = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return result
 
 # returns usage for ALL budgets belonging to a user.
 
@@ -335,6 +436,9 @@ def get_all_budget_usage(user_id):
 
 
 def search_budgets(user_id, search):
+
+    conn = get_connection()
+    cur = conn.cursor()
 
     cur.execute("""
         SELECT
@@ -378,9 +482,16 @@ def search_budgets(user_id, search):
 
     """, (user_id, f"%{search}%"))
 
-    return cur.fetchall()
+    result = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return result
 
 def update_budget(budget_id, limit_amount):
+    conn = get_connection()
+    cur = conn.cursor()
 
     cur.execute("""
         UPDATE budgets
@@ -390,7 +501,12 @@ def update_budget(budget_id, limit_amount):
 
     conn.commit()
 
+    cur.close()
+    conn.close()
+
 def delete_budget(budget_id):
+    conn = get_connection()
+    cur = conn.cursor()
 
     cur.execute("""
         DELETE FROM budgets
@@ -399,23 +515,44 @@ def delete_budget(budget_id):
 
     conn.commit()
 
+    cur.close()
+    conn.close()
+
 # Goals Queries:
 
 def get_goals():
+    conn = get_connection()
+    cur = conn.cursor()
+
     cur.execute("select * from goals;")
     goals = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
     return goals
 
 def fetch_goal(goal_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    
     cur.execute("""
         SELECT goal_name, saved_amount
         FROM goals
         WHERE id = %s
     """, (goal_id,))
 
-    return cur.fetchone()
+    result = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    return result
 
 def insert_goals(values):
+    conn = get_connection()
+    cur = conn.cursor()
+
     try:
         cur.execute("""
             INSERT INTO goals(
@@ -434,29 +571,49 @@ def insert_goals(values):
         print(e)
         raise
 
+    finally:
+
+        cur.close()
+        conn.close()
+
 # This ensures that if an insert fails, the transaction is rolled back 
 # and future queries will work normally.
 
 def get_user_goals(user_id):
+
+    conn = get_connection()
+    cur = conn.cursor()
     cur.execute("""
         SELECT id, goal_name, target_amount, saved_amount, deadline
         FROM goals WHERE user_id = %s ORDER BY deadline ASC
 """, (user_id,))
     
     user_goals = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
     return user_goals
 
 #"ORDER BY deadline ASC" shows the goals with the nearest deadline first.
 
 def update_goal_progress(goal_id, amount):
+    conn = get_connection()
+    cur = conn.cursor()
+
     cur.execute("""
         UPDATE goals SET saved_amount = LEAST(saved_amount + %s,target_amount) WHERE id = %s
     """, (amount, goal_id))
 
     conn.commit()
 
+    cur.close()
+    conn.close()
+
 # For adding savings to an existing goal:
 def update_goal_details(values):
+    conn = get_connection()
+    cur = conn.cursor()
 
     cur.execute("""
         UPDATE goals SET goal_name = %s, target_amount = %s,
@@ -465,14 +622,26 @@ def update_goal_details(values):
 
     conn.commit()
 
+    cur.close()
+    conn.close()
+
 def delete_goal(goal_id, user_id):
+    conn = get_connection()
+    cur = conn.cursor()
+
     cur.execute("DELETE FROM goals WHERE id = %s AND user_id = %s", (goal_id, user_id))
 
     conn.commit()
 
+    cur.close()
+    conn.close()
+
 # LEAST -> Prevents the saved amount from exceeding the target amount.
 
 def get_goal_progress(goal_id):
+    conn = get_connection()
+    cur = conn.cursor()
+
     cur.execute("""
         SELECT goal_name, target_amount, saved_amount,
         ROUND((saved_amount / target_amount) * 100, 2)
@@ -480,6 +649,10 @@ def get_goal_progress(goal_id):
     """, (goal_id,))
 
     goal_progress = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
     return goal_progress
 
 # ROUND((saved_amount / target_amount) * 100, 2) -> returns a goal's completion percentage
@@ -489,8 +662,15 @@ def get_goal_progress(goal_id):
 # Categories Queries:
 
 def get_categories():
+    conn = get_connection()
+    cur = conn.cursor()
+
     cur.execute("select * from categories")
     categories = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
     return  categories
 
         # Use to:
@@ -500,36 +680,69 @@ def get_categories():
 
 # Users Queries:
 def check_user_exists(email):
+    conn = get_connection()
+    cur = conn.cursor()
+
     cur.execute("select * from users where email = %s",(email,))
     user = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
     return user
 
 def create_user(user_details):
+    conn = get_connection()
+    cur = conn.cursor()
+
     cur.execute("insert into users(full_name,email,phone_number,password)values(%s,%s,%s,%s)",user_details)
     conn.commit()
 
+    cur.close()
+    conn.close()
+
 # Search query
 def search_goals(user_id, search):
+    conn = get_connection()
+    cur = conn.cursor()
 
     cur.execute("""SELECT id, goal_name, target_amount, saved_amount, deadline
         FROM goals WHERE user_id = %s AND LOWER(goal_name) LIKE LOWER(%s)
         ORDER BY deadline ASC
     """, (user_id, f"%{search}%"))
 
-    return cur.fetchall()
+    result = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return result
 
 def get_savings_category():
+    conn = get_connection()
+    cur = conn.cursor()
 
     cur.execute("SELECT id FROM categories WHERE category_name = 'Savings'")
 
     result = cur.fetchone()
 
     if result:
-        return result[0]
+        category = result[0]
+
+        cur.close()
+        conn.close()
+
+        return category
+
+    cur.close()
+    conn.close()
 
     return None
 
 def get_monthly_category_summary(user_id):
+    conn = get_connection()
+    cur = conn.cursor()
+
     cur.execute("""SELECT c.category_name, SUM(t.amount)
     FROM transactions t JOIN categories c ON t.category_id = c.id
     WHERE t.user_id = %s AND t.type = 'expense'
@@ -538,4 +751,8 @@ def get_monthly_category_summary(user_id):
     GROUP BY c.category_name ORDER BY SUM(t.amount) DESC;""", (user_id,))
 
     summary = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
     return summary
